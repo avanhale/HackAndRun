@@ -45,7 +45,7 @@ public class PlayArea : MonoBehaviour
     }
 
 
-    public void SetCardsToSpots(GameManager.Player player)
+    public void SetCardsToSpots(PlayerNR player)
 	{
         if (player.IsRunner())
 		{
@@ -55,7 +55,7 @@ public class PlayArea : MonoBehaviour
 		}
 	}
 
-    public void AddCardsToHand(GameManager.Player player, Card[] cards)
+    public void AddCardsToHand(PlayerNR player, Card[] cards)
 	{
         if (player.IsRunner())
 		{
@@ -63,7 +63,7 @@ public class PlayArea : MonoBehaviour
 		}
 	}
 
-    public bool IsHandSizeMaxed(GameManager.Player player)
+    public bool IsHandSizeMaxed(PlayerNR player)
 	{
         if (player.IsRunner())
 		{
@@ -73,7 +73,7 @@ public class PlayArea : MonoBehaviour
 
     }
 
-    public Card DrawCardFromDeck(GameManager.Player player)
+    public Card DrawCardFromDeck(PlayerNR player)
 	{
         if (player.IsRunner())
 		{
@@ -87,7 +87,7 @@ public class PlayArea : MonoBehaviour
         return null;
 	}
 
-    public void ResetActionTracker(GameManager.Player player)
+    public void ResetActionTracker(PlayerNR player)
 	{
         if (player.IsRunner())
 		{
@@ -95,7 +95,7 @@ public class PlayArea : MonoBehaviour
         }
 	}
 
-    public void SpendActionPoints(GameManager.Player player, int numActionPoints)
+    public void SpendActionPoints(PlayerNR player, int numActionPoints)
 	{
         if (player.IsRunner())
         {
@@ -103,7 +103,7 @@ public class PlayArea : MonoBehaviour
         }
     }
 
-    public int CostOfAction(GameManager.Player player, int actionIndex)
+    public int CostOfAction(PlayerNR player, int actionIndex)
 	{
         if (player.IsRunner())
 		{
@@ -112,7 +112,7 @@ public class PlayArea : MonoBehaviour
         return -123;
 	}
 
-    public bool CanAffordAction(GameManager.Player player, int costOfAction)
+    public bool CanAffordAction(PlayerNR player, int costOfAction)
     {
         if (player.IsRunner())
         {

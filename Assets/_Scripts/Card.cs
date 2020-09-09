@@ -24,6 +24,7 @@ public abstract class Card : MonoBehaviour, ISelectableNR
 
     protected virtual void Awake()
 	{
+        isFaceUp = true;
         cardRefs = GetComponent<CardReferences>();
         cardFunction = GetComponent<CardFunction>();
         cardCost = GetComponent<CardCost>();
@@ -32,7 +33,6 @@ public abstract class Card : MonoBehaviour, ISelectableNR
 	// Start is called before the first frame update
 	protected virtual void Start()
     {
-        isFaceUp = true;
         UpdateCardTitle();
         UpdateCardTypes();
         if (cardCost) UpdateCardCost();

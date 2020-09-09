@@ -5,7 +5,6 @@ using UnityEngine;
 public class PlayCardManager : MonoBehaviour
 {
     public static PlayCardManager instance;
-    public int numCardsToDrawFirstHand;
 
     // Action Point Indexes
     private const int
@@ -44,23 +43,24 @@ public class PlayCardManager : MonoBehaviour
     }
 
 
-    public void DrawFirstHands()
+    public void DrawCards(int numberOfCards)
 	{
-        Card[] runnerCards = new Card[numCardsToDrawFirstHand];
-		for (int i = 0; i < numCardsToDrawFirstHand; i++)
+        Card[] drawnCards = new Card[numberOfCards];
+		for (int i = 0; i < numberOfCards; i++)
 		{
-            Card drawnCard = PlayArea.instance.DrawCardFromDeck(GameManager.instance.runner);
-            runnerCards[i] = drawnCard;
+            Card drawnCard = PlayArea.instance.DrawCardFromDeck(PlayerNR.Runner);
+            drawnCards[i] = drawnCard;
+            drawnCard.FlipCard();
 		}
 
-        PlayArea.instance.AddCardsToHand(GameManager.instance.runner, runnerCards);
+        PlayArea.instance.AddCardsToHand(PlayerNR.Runner, drawnCards);
 
 
 	}
 
     public bool TryDrawNextCard()
 	{
-        if (CanAffordAction(1) && CanDrawAnotherCard())
+        if (CanDrawAnotherCard())
 		{
             Action_DrawNextCard();
             return true;
@@ -70,35 +70,62 @@ public class PlayCardManager : MonoBehaviour
 
     public bool CanAffordAction(int actionIndex)
 	{
-        int costOfAction = PlayArea.instance.CostOfAction(GameManager.instance.runner, actionIndex);
-        return PlayArea.instance.CanAffordAction(GameManager.instance.runner, costOfAction);
+        int costOfAction = PlayArea.instance.CostOfAction(PlayerNR.Runner, actionIndex);
+        return PlayArea.instance.CanAffordAction(PlayerNR.Runner, costOfAction);
 	}
 
     public bool CanDrawAnotherCard()
 	{
-        return !PlayArea.instance.IsHandSizeMaxed(GameManager.instance.runner);
+        //!PlayArea.instance.IsHandSizeMaxed(GameManager.instance.runner);
+        return CanAffordAction(RUNNER_DRAW_CARD);
     }
 
-	#region Actions
-	public void Action_DrawNextCard()
+
+    public bool CanGainCredit()
 	{
-        int actionIndex = 1;
-        int costOfAction = PlayArea.instance.CostOfAction(GameManager.instance.runner, actionIndex);
-        PlayArea.instance.SpendActionPoints(GameManager.instance.runner, costOfAction);
+        return CanAffordAction(RUNNER_GAIN_CREDIT);
+	}
+
+    public void TryGainCredit()
+	{
+        if (CanGainCredit())
+		{
+            Action_GainCredit();
+        }
+	}
+
+
+
+	#region Actions
+	void Action_DrawNextCard()
+	{
+        int costOfAction = PlayArea.instance.CostOfAction(PlayerNR.Runner, RUNNER_DRAW_CARD);
+        PlayArea.instance.SpendActionPoints(PlayerNR.Runner, costOfAction);
         DrawNextCard();
     }
 
-
-	#endregion
-
-	public void DrawNextCard()
+    void Action_GainCredit()
 	{
-        Card drawnCard = PlayArea.instance.DrawCardFromDeck(GameManager.instance.runner);
-        PlayArea.instance.AddCardsToHand(GameManager.instance.runner, new Card[1] { drawnCard });
+        int costOfAction = PlayArea.instance.CostOfAction(PlayerNR.Runner, RUNNER_GAIN_CREDIT);
+        PlayArea.instance.SpendActionPoints(PlayerNR.Runner, costOfAction);
+        GainCredit();
     }
 
 
-    public void StartTurn(GameManager.Player playerTurn)
+    #endregion
+
+    void DrawNextCard()
+	{
+        DrawCards(1);
+    }
+
+    void GainCredit()
+	{
+        PlayerNR.Runner.AddCredits(1);
+	}
+
+
+    public void StartTurn(PlayerNR playerTurn)
 	{
         PlayArea.instance.ResetActionTracker(playerTurn);
 	}

@@ -31,6 +31,7 @@ public class Deck : MonoBehaviour, ISelectableNR
         }
         ShuffleDeck();
         UpdateCardsToParent();
+        MakeAllDeckFaceDown();
     }
 
     void UpdateCardsToParent()
@@ -61,6 +62,14 @@ public class Deck : MonoBehaviour, ISelectableNR
         return _list;
     }
 
+    void MakeAllDeckFaceDown()
+    {
+        for (int i = 0; i < cardsInDeck.Count; i++)
+        {
+            cardsInDeck[i].FlipCard();
+        }
+    }
+
     public bool IsDeckEmpty()
 	{
         return cardsInDeck.Count == 0;
@@ -85,7 +94,7 @@ public class Deck : MonoBehaviour, ISelectableNR
 
 	public bool CanSelect()
 	{
-        return PlayCardManager.instance.CanDrawAnotherCard();
+        return !IsDeckEmpty() && PlayCardManager.instance.CanDrawAnotherCard();
 	}
 
 	public void Highlighted()

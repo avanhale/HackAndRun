@@ -14,31 +14,12 @@ public class GameManager : MonoBehaviour
     public delegate void CardInstallation(Card card, bool installed);
     public static event CardInstallation OnCardInstallation;
 
-    [System.Serializable]
-    public class Player
-	{
-        public PlayerSide playerSide;
-        public Card_Identity identity;
-        public Card[] deckCards;
+    [Header("Game Data")]
+    public int numCardsToDrawFirstHand;
+    public int numCreditsToStartWith;
 
-        public Player(PlayerSide _playerSide)
-		{
-            playerSide = _playerSide;
-		}
 
-        public bool IsRunner()
-		{
-            return playerSide == PlayerSide.Runner;
-		}
-
-    }
-
-    [SerializeField]
-    Player e_CorporationPlayer, e_RunnerPlayer;
-    [HideInInspector]
-    public Player corporation, runner;
-
-	private void Awake()
+    private void Awake()
 	{
         instance = this;
 	}
@@ -47,6 +28,7 @@ public class GameManager : MonoBehaviour
 	void Start()
     {
         SpawnAndSetCards();
+        SetPlayerCredits(PlayerNR.Runner, numCreditsToStartWith);
         DrawFirstHands();
     }
 
@@ -58,36 +40,41 @@ public class GameManager : MonoBehaviour
 
 
 
+
     void SpawnAndSetCards()
 	{
         // Runner
-        runner = new Player(PlayerSide.Runner);
-        Card_Identity playerIdentity = Instantiate(e_RunnerPlayer.identity);
-        runner.identity = playerIdentity;
+        Card_Identity runnerIdentity = Instantiate(PlayerNR.Runner.e_PlayerDeck.identityCard);
 
-        int numCards = e_RunnerPlayer.deckCards.Length;
-        runner.deckCards = new Card[numCards];
+        Card[] e_deckCards = PlayerNR.Runner.e_PlayerDeck.deckCards;
+        int numCards = e_deckCards.Length;
+        Card[] deckCards = new Card[numCards];
 		for (int i = 0; i < numCards; i++)
 		{
-            Card card = Instantiate(e_RunnerPlayer.deckCards[i]);
-            runner.deckCards[i] = card;
+            Card card = Instantiate(e_deckCards[i]);
+            deckCards[i] = card;
 		}
 
+        PlayerNR.Runner.SetPlayerCards(runnerIdentity, deckCards);
+        PlayArea.instance.SetCardsToSpots(PlayerNR.Runner);
 
-        PlayArea.instance.SetCardsToSpots(runner);
+	}
 
+    void SetPlayerCredits(PlayerNR player, int numCredits)
+	{
+        player.Credits = numCredits;
 	}
 
 
     void DrawFirstHands()
 	{
-        PlayCardManager.instance.DrawFirstHands();
+        PlayCardManager.instance.DrawCards(numCardsToDrawFirstHand);
 	}
 
     
     void StartNextTurn()
 	{
-        PlayCardManager.instance.StartTurn(currentTurnSide == PlayerSide.Runner ? runner : corporation);
+        PlayCardManager.instance.StartTurn(currentTurnSide == PlayerSide.Runner ? PlayerNR.Runner : PlayerNR.Corporation);
 	}
 
 
