@@ -53,8 +53,7 @@ public class PlayCardManager : MonoBehaviour
             drawnCard.FlipCard();
 		}
 
-        PlayArea.instance.AddCardsToHand(PlayerNR.Runner, drawnCards);
-
+        PlayerNR.Runner.AddCardsToHand(drawnCards);
 
 	}
 
@@ -71,7 +70,7 @@ public class PlayCardManager : MonoBehaviour
     public bool CanAffordAction(int actionIndex)
 	{
         int costOfAction = PlayArea.instance.CostOfAction(PlayerNR.Runner, actionIndex);
-        return PlayArea.instance.CanAffordAction(PlayerNR.Runner, costOfAction);
+        return PlayerNR.Runner.CanAffordAction(costOfAction);
 	}
 
     public bool CanDrawAnotherCard()
@@ -100,14 +99,14 @@ public class PlayCardManager : MonoBehaviour
 	void Action_DrawNextCard()
 	{
         int costOfAction = PlayArea.instance.CostOfAction(PlayerNR.Runner, RUNNER_DRAW_CARD);
-        PlayArea.instance.SpendActionPoints(PlayerNR.Runner, costOfAction);
+        PlayerNR.Runner.ActionPointsUsed(costOfAction);
         DrawNextCard();
     }
 
     void Action_GainCredit()
 	{
         int costOfAction = PlayArea.instance.CostOfAction(PlayerNR.Runner, RUNNER_GAIN_CREDIT);
-        PlayArea.instance.SpendActionPoints(PlayerNR.Runner, costOfAction);
+        PlayerNR.Runner.ActionPointsUsed(costOfAction);
         GainCredit();
     }
 
@@ -127,7 +126,15 @@ public class PlayCardManager : MonoBehaviour
 
     public void StartTurn(PlayerNR playerTurn)
 	{
-        PlayArea.instance.ResetActionTracker(playerTurn);
+        if (playerTurn.IsRunner())
+		{
+            playerTurn.ActionPoints = 4;
+            playerTurn.MemoryUnitsTotal = 4;
+        }
+        else
+		{
+            playerTurn.ActionPoints = 3;
+		}
 	}
 
 

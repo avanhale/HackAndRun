@@ -30,6 +30,7 @@ public class GameManager : MonoBehaviour
         SpawnAndSetCards();
         SetPlayerCredits(PlayerNR.Runner, numCreditsToStartWith);
         DrawFirstHands();
+        StartNextTurn();
     }
 
     // Update is called once per frame

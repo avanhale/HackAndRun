@@ -1,55 +1,31 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
 
 public class ActionTracker : MonoBehaviour
 {
+    public PlayerSide playerSide;
+    PlayerNR myPlayer;
     Button[] actionPointButtons;
-    public int numActionPoints;
 
 
 	private void Awake()
 	{
+        myPlayer = playerSide == PlayerSide.Runner ? PlayerNR.Runner : PlayerNR.Corporation;
         GetActionPointButtons();
-        numActionPoints = actionPointButtons.Length;
     }
 
-    // Start is called before the first frame update
-    void Start()
-    {
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-    }
-
-    public bool HasEnoughActionPoints(int numActions)
+	private void OnEnable()
 	{
-        return numActionPoints >= numActions;
+		myPlayer.OnActionPointsChanged += MyPlayer_OnActionPointsChanged;
+	}
+	private void OnDisable()
+	{
+		myPlayer.OnActionPointsChanged -= MyPlayer_OnActionPointsChanged;
 	}
 
-    public bool TryUseActionPoints(int numActions)
+	private void MyPlayer_OnActionPointsChanged()
 	{
-        if (HasEnoughActionPoints(numActions))
-		{
-            ActionPointsUsed(numActions);
-            return true;
-        }
-        return false;
-	}
-
-    public void ResetActionPoints()
-	{
-        numActionPoints = actionPointButtons.Length;
-        UpdateActionPointButtons();
-    }
-
-    public void ActionPointsUsed(int numActions)
-	{
-        numActionPoints -= numActions;
-        UpdateActionPointButtons();
+		UpdateActionPointButtons();
 	}
 
     void UpdateActionPointButtons()
@@ -58,15 +34,13 @@ public class ActionTracker : MonoBehaviour
 		{
             actionPointButtons[i].interactable = false;
 		}
-		for (int i = 0; i < numActionPoints; i++)
+		for (int i = 0; i < myPlayer.ActionPoints; i++)
 		{
             int targetIndex = actionPointButtons.Length - (i + 1);
             if (targetIndex >= 0 && targetIndex < actionPointButtons.Length)
                 actionPointButtons[targetIndex].interactable = true;
 		}
 	}
-
-
 
     void GetActionPointButtons()
 	{

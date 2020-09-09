@@ -63,16 +63,6 @@ public class PlayArea : MonoBehaviour
 		}
 	}
 
-    public bool IsHandSizeMaxed(PlayerNR player)
-	{
-        if (player.IsRunner())
-		{
-            return runnerHand.HandSizeFull();
-		}
-        return false;
-
-    }
-
     public Card DrawCardFromDeck(PlayerNR player)
 	{
         if (player.IsRunner())
@@ -87,22 +77,6 @@ public class PlayArea : MonoBehaviour
         return null;
 	}
 
-    public void ResetActionTracker(PlayerNR player)
-	{
-        if (player.IsRunner())
-		{
-            runnerActionTracker.ResetActionPoints();
-        }
-	}
-
-    public void SpendActionPoints(PlayerNR player, int numActionPoints)
-	{
-        if (player.IsRunner())
-        {
-            runnerActionTracker.ActionPointsUsed(numActionPoints);
-        }
-    }
-
     public int CostOfAction(PlayerNR player, int actionIndex)
 	{
         if (player.IsRunner())
@@ -111,15 +85,4 @@ public class PlayArea : MonoBehaviour
         }
         return -123;
 	}
-
-    public bool CanAffordAction(PlayerNR player, int costOfAction)
-    {
-        if (player.IsRunner())
-        {
-            return runnerActionTracker.HasEnoughActionPoints(costOfAction);
-        }
-        return false;
-    }
-
-
 }

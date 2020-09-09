@@ -101,6 +101,11 @@ public abstract class Card : MonoBehaviour, ISelectableNR
         }
     }
 
+    public bool IsCardInHand()
+	{
+        return PlayerNR.Runner.IsCardInHand(this);
+	}
+
 
 	public bool CanHighlight()
 	{
@@ -118,7 +123,27 @@ public abstract class Card : MonoBehaviour, ISelectableNR
 
 	public void Selected()
 	{
-        FlipCard();
+        if (IsCardInHand())
+		{
+            ActivateCardFromHand();
+		}
+        //FlipCard();
+        print(IsCardInHand());
+	}
+
+    public void ActivateCardFromHand()
+	{
+        if (cardType == CardType.Program ||
+            cardType == CardType.Hardware ||
+            cardType == CardType.Resource)
+		{
+            InstallCard();
+		}
+	}
+
+    public void InstallCard()
+	{
+        RunnerRIG.instance.InstallCard(this);
 	}
 
 
