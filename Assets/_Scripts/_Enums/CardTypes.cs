@@ -39,7 +39,23 @@ public enum CardSubType
     Gate, Barrier, Sentry, Trap, Trance,
 
     // Upgrade
-    Facility
+    Facility,
+
+
+    // Hardware
+    Console,
+
+    // Resource
+    Job, Connection, Location, Link,
+
+    // Program
+    Worm,
+
+    // Event
+    
+
+
+
 
 }
 

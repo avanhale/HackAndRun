@@ -28,7 +28,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7a100815556ed5745abb1a7b88143876, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  costOfCard: 4
+  costOfCard: 0
 --- !u!1001 &3864848811809471676
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -49,12 +49,12 @@ PrefabInstance:
     - target: {fileID: 1394157416794081577, guid: 2c36707fb223ee34abbe5e7dadfa2f11,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 0
+      value: 52
       objectReference: {fileID: 0}
     - target: {fileID: 1394157416794081577, guid: 2c36707fb223ee34abbe5e7dadfa2f11,
         type: 3}
       propertyPath: m_SizeDelta.x
-      value: 0
+      value: 100
       objectReference: {fileID: 0}
     - target: {fileID: 1394157416794081577, guid: 2c36707fb223ee34abbe5e7dadfa2f11,
         type: 3}
@@ -84,7 +84,7 @@ PrefabInstance:
     - target: {fileID: 1394157417206425225, guid: 2c36707fb223ee34abbe5e7dadfa2f11,
         type: 3}
       propertyPath: m_SizeDelta.x
-      value: 0
+      value: 100
       objectReference: {fileID: 0}
     - target: {fileID: 1394157417206425225, guid: 2c36707fb223ee34abbe5e7dadfa2f11,
         type: 3}

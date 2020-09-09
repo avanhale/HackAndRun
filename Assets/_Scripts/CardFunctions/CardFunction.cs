@@ -4,7 +4,12 @@ using UnityEngine;
 
 public abstract class CardFunction : MonoBehaviour
 {
+	protected Card card;
 
+	protected virtual void Awake()
+	{
+		card = GetComponent<Card>();
+	}
 
 
 	protected virtual void OnEnable()

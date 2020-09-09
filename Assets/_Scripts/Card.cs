@@ -16,7 +16,7 @@ public abstract class Card : MonoBehaviour
 
 
 
-	private void Awake()
+	protected virtual void Awake()
 	{
         cardRefs = GetComponent<CardReferences>();
         cardFunction = GetComponent<CardFunction>();
@@ -24,10 +24,8 @@ public abstract class Card : MonoBehaviour
     }
 
 	// Start is called before the first frame update
-	void Start()
+	protected virtual void Start()
     {
-        print(cardType.TypeToString());
-        print(cardSubType.TypeToString());
         UpdateCardTitle();
         UpdateCardTypes();
         if (cardCost) UpdateCardCost();
@@ -65,10 +63,25 @@ public abstract class Card : MonoBehaviour
     }
 
 
-	//private void OnValidate()
-	//{
- //       if (titleText) titleText.text = cardTitle;
-	//}
+
+    // Installation
+    protected virtual void CardInstalled()
+	{
+
+	}
+
+    protected virtual void CardUnInstalled()
+    {
+
+    }
+
+
+
+
+    //private void OnValidate()
+    //{
+    //       if (titleText) titleText.text = cardTitle;
+    //}
 
 
 }
