@@ -44,9 +44,9 @@ public class Hand : MonoBehaviour
         return cardsInHand.Count;
 	}
 
-    public bool CardsGreaterThanMax()
+    public bool HandSizeFull()
 	{
-        return NumberOfCardsInHand() > maximumHandSize;
+        return NumberOfCardsInHand() >= maximumHandSize;
 	}
 
 

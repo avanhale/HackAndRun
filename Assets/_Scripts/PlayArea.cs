@@ -15,24 +15,33 @@ public class PlayArea : MonoBehaviour
     public Deck runnerDeck;
     public Hand runnerHand;
     public ActionTracker runnerActionTracker;
+    public ActionsReferenceCard runnerActionsReferenceCard;
 
 
 	private void Awake()
 	{
         instance = this;
+        Canvas.ForceUpdateCanvases();
     }
 
 
 	// Start is called before the first frame update
 	void Start()
     {
-        
+        Canvas.ForceUpdateCanvases();
+
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+        if (Input.GetKeyDown(KeyCode.B))
+		{
+			foreach (var rt in GetComponentsInChildren<RectTransform>())
+			{
+                rt.ForceUpdateRectTransforms();
+			}
+		}
     }
 
 
@@ -53,6 +62,16 @@ public class PlayArea : MonoBehaviour
             runnerHand.AddCardsToHand(cards);
 		}
 	}
+
+    public bool IsHandSizeMaxed(GameManager.Player player)
+	{
+        if (player.IsRunner())
+		{
+            return runnerHand.HandSizeFull();
+		}
+        return false;
+
+    }
 
     public Card DrawCardFromDeck(GameManager.Player player)
 	{
@@ -76,6 +95,31 @@ public class PlayArea : MonoBehaviour
         }
 	}
 
+    public void SpendActionPoints(GameManager.Player player, int numActionPoints)
+	{
+        if (player.IsRunner())
+        {
+            runnerActionTracker.ActionPointsUsed(numActionPoints);
+        }
+    }
+
+    public int CostOfAction(GameManager.Player player, int actionIndex)
+	{
+        if (player.IsRunner())
+		{
+            return runnerActionsReferenceCard.CostOfAction(actionIndex);
+        }
+        return -123;
+	}
+
+    public bool CanAffordAction(GameManager.Player player, int costOfAction)
+    {
+        if (player.IsRunner())
+        {
+            return runnerActionTracker.HasEnoughActionPoints(costOfAction);
+        }
+        return false;
+    }
 
 
 }

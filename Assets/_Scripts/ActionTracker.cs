@@ -12,6 +12,7 @@ public class ActionTracker : MonoBehaviour
 	private void Awake()
 	{
         GetActionPointButtons();
+        numActionPoints = actionPointButtons.Length;
     }
 
     // Start is called before the first frame update
@@ -24,15 +25,30 @@ public class ActionTracker : MonoBehaviour
     {
     }
 
+    public bool HasEnoughActionPoints(int numActions)
+	{
+        return numActionPoints >= numActions;
+	}
+
+    public bool TryUseActionPoints(int numActions)
+	{
+        if (HasEnoughActionPoints(numActions))
+		{
+            ActionPointsUsed(numActions);
+            return true;
+        }
+        return false;
+	}
+
     public void ResetActionPoints()
 	{
         numActionPoints = actionPointButtons.Length;
         UpdateActionPointButtons();
     }
 
-    public void ActionPointUsed()
+    public void ActionPointsUsed(int numActions)
 	{
-        numActionPoints--;
+        numActionPoints -= numActions;
         UpdateActionPointButtons();
 	}
 

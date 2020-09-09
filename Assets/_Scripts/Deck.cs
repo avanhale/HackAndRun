@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Deck : MonoBehaviour
+public class Deck : MonoBehaviour, ISelectableNR
 {
 
     public Transform cardsParentT;
@@ -35,7 +35,8 @@ public class Deck : MonoBehaviour
 
     void UpdateCardsToParent()
 	{
-        for (int i = 0; i < cardsInDeck.Count; i++)
+        // Reverse because lowest in hierarchy is visually on top of deck (first card, last child)
+        for (int i = cardsInDeck.Count-1; i >= 0; i--)
 		{
             cardsInDeck[i].transform.SetParent(cardsParentT, false);
         }
@@ -77,6 +78,23 @@ public class Deck : MonoBehaviour
         return false;
 	}
 
+	public bool CanHighlight()
+	{
+        return true;
+	}
 
+	public bool CanSelect()
+	{
+        return PlayCardManager.instance.CanDrawAnotherCard();
+	}
+
+	public void Highlighted()
+	{
+	}
+
+	public void Selected()
+	{
+        PlayCardManager.instance.TryDrawNextCard();
+	}
 }
 

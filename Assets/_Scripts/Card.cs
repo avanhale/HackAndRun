@@ -2,21 +2,27 @@
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using DG.Tweening;
 
-public abstract class Card : MonoBehaviour
+public abstract class Card : MonoBehaviour, ISelectableNR
 {
     CardReferences cardRefs;
     CardFunction cardFunction;
     CardCost cardCost;
+
     [Header("Card Data")]
     public PlayerSide playerSide;
     public CardType cardType;
     public CardSubType cardSubType;
     public string cardTitle;
 
+    [Header("Play Data")]
+    public bool isFaceUp = true;
+    float cardFlipTransitionTime = 1f;
 
 
-	protected virtual void Awake()
+
+    protected virtual void Awake()
 	{
         cardRefs = GetComponent<CardReferences>();
         cardFunction = GetComponent<CardFunction>();
@@ -26,6 +32,7 @@ public abstract class Card : MonoBehaviour
 	// Start is called before the first frame update
 	protected virtual void Start()
     {
+        isFaceUp = true;
         UpdateCardTitle();
         UpdateCardTypes();
         if (cardCost) UpdateCardCost();
@@ -76,12 +83,50 @@ public abstract class Card : MonoBehaviour
     }
 
 
+    public void FlipCard()
+	{
+        isFaceUp = !isFaceUp;
+        UpdateCardFlipDisplay();
+	}
+
+    void UpdateCardFlipDisplay()
+	{
+        if (isFaceUp)
+		{
+            transform.DOLocalRotate(Vector3.zero, cardFlipTransitionTime);
+		}
+        else
+		{
+            transform.DOLocalRotate(Vector3.up * 180, cardFlipTransitionTime);
+        }
+    }
 
 
-    //private void OnValidate()
-    //{
-    //       if (titleText) titleText.text = cardTitle;
-    //}
+	public bool CanHighlight()
+	{
+        return true;
+	}
+
+	public bool CanSelect()
+	{
+        return true;
+	}
+
+	public void Highlighted()
+	{
+	}
+
+	public void Selected()
+	{
+        FlipCard();
+	}
+
+
+
+	//private void OnValidate()
+	//{
+	//       if (titleText) titleText.text = cardTitle;
+	//}
 
 
 }
