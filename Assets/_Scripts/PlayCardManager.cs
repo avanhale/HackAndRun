@@ -26,9 +26,17 @@ public class PlayCardManager : MonoBehaviour
     public delegate void CardInstalled(Card card, bool installed);
     public static event CardInstalled OnCardInstalled;
 
+    public delegate void CardActivated(Card card);
+    public static event CardActivated OnCardActivated;
+
+    [Header("Starting Points")]
+    public int numActionPointsStart;
+    public int numMemoryUnitsStart;
+    public int numTagsStart;
 
 
-	private void Awake()
+
+    private void Awake()
 	{
         instance = this;
     }
@@ -76,6 +84,11 @@ public class PlayCardManager : MonoBehaviour
         return PlayerNR.Runner.CanAffordAction(costOfAction);
 	}
 
+    public bool CanAffordCost(int cost)
+	{
+        return PlayerNR.Runner.CanAffordCost(cost);
+	}
+
     public bool CanDrawAnotherCard()
 	{
         //!PlayArea.instance.IsHandSizeMaxed(GameManager.instance.runner);
@@ -101,32 +114,58 @@ public class PlayCardManager : MonoBehaviour
         return CanAffordAction(RUNNER_INSTALL) && installableCard.CanInstall();
 	}
 
- //   public bool CanInstallCard(Card card)
-	//{
- //       if (card.GetType() == typeof(Card_Program))
- //       {
- //           Card_Program program = (Card_Program)card;
- //           // Check for memory usage too
- //       }
- //   }
-
-
     public bool TryInstallCard(IInstallable installableCard)
 	{
-        if (installableCard.CanInstall())
+        if (CanInstallCard(installableCard))
 		{
             Action_InstallCard(installableCard);
             Card card = (Card)installableCard;
             PayCostOfCard(card);
+            UseMemorySpaceOfCard(card);
+            return true;
+		}
+        return false;
+	}
+
+    public bool CanActivateEvent(IActivateable activateableCard)
+	{
+        return CanAffordAction(RUNNER_EVENT) && activateableCard.CanActivate();
+	}
+
+    public bool TryActivateEvent(IActivateable activateableCard)
+	{
+        if (CanActivateEvent(activateableCard))
+		{
+            Action_ActivateEvent(activateableCard);
+            Card card = (Card)activateableCard;
+            PayCostOfCard(card);
+            SendCardToDiscard(card);
+        }
+        return true;
+	}
+
+    public bool CanRemoveTag()
+	{
+        return CanAffordAction(RUNNER_REMOVE_TAG)
+            && CanAffordCost(2)
+            && PlayerNR.Runner.Tags > 0;
+    }
+
+    public bool TryRemoveTag()
+	{
+        if (CanRemoveTag())
+		{
+            Action_RemoveTag();
+            PayCost(2);
+
             return true;
 		}
         return false;
 	}
 
 
-
-	#region Actions
-	void Action_DrawNextCard()
+    #region Actions
+    void Action_DrawNextCard()
 	{
         int costOfAction = PlayArea.instance.CostOfAction(PlayerNR.Runner, RUNNER_DRAW_CARD);
         PlayerNR.Runner.ActionPointsUsed(costOfAction);
@@ -147,6 +186,24 @@ public class PlayCardManager : MonoBehaviour
         InstallCard(installableCard);
     }
 
+    void Action_ActivateEvent(IActivateable activateableCard)
+	{
+        int costOfAction = PlayArea.instance.CostOfAction(PlayerNR.Runner, RUNNER_EVENT);
+        PlayerNR.Runner.ActionPointsUsed(costOfAction);
+        ActivateCard(activateableCard);
+    }
+
+    void Action_RemoveTag()
+	{
+        int costOfAction = PlayArea.instance.CostOfAction(PlayerNR.Runner, RUNNER_REMOVE_TAG);
+        PlayerNR.Runner.ActionPointsUsed(costOfAction);
+        RemoveTag();
+    }
+
+    void PayCost(int cost)
+	{
+        PlayerNR.Runner.Credits -= cost;
+	}
 
     void PayCostOfCard(Card card)
 	{
@@ -157,6 +214,16 @@ public class PlayCardManager : MonoBehaviour
         }
         else print("Did not pay for card!!!");
 	}
+
+	void UseMemorySpaceOfCard(Card card)
+	{
+		int spaceAvailable = PlayerNR.Runner.MemoryUnitsAvailable;
+		if (card.cardCost.TryUseMemorySpace(ref spaceAvailable))
+		{
+            PlayerNR.Runner.MemoryUnitsAvailable = spaceAvailable;
+        }
+        else print("Did not use Memory Space for card!!!");
+    }
 
     #endregion
 
@@ -176,13 +243,32 @@ public class PlayCardManager : MonoBehaviour
         OnCardInstalled?.Invoke((Card)installableCard, true);
     }
 
+    void ActivateCard(IActivateable activateableCard)
+	{
+        activateableCard.ActivateCard();
+        OnCardActivated?.Invoke((Card)activateableCard);
+    }
+
+    void RemoveTag()
+	{
+        PlayerNR.Runner.Tags--;
+	}
+
+
+    void SendCardToDiscard(Card card)
+	{
+        PlayArea.instance.SendCardToDiscard(PlayerNR.Runner, card);
+	}
+
 
     public void StartTurn(PlayerNR playerTurn)
 	{
         if (playerTurn.IsRunner())
 		{
-            playerTurn.ActionPoints = 4;
-            playerTurn.MemoryUnitsTotal = 4;
+            playerTurn.ActionPoints = numActionPointsStart;
+            playerTurn.MemoryUnitsTotal = numMemoryUnitsStart;
+            playerTurn.MemoryUnitsAvailable = numMemoryUnitsStart;
+            playerTurn.Tags = numTagsStart;
         }
         else
 		{

@@ -35,8 +35,4 @@ public class Card_Hardware : Card, IInstallable
 		return cardCost.CanAffordCard(PlayerNR.Runner.Credits);
 	}
 
-	public override void InstallCard()
-	{
-		PlayCardManager.instance.TryInstallCard(this);
-	}
 }

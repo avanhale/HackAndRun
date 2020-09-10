@@ -12,8 +12,6 @@ public class RunnerRIG : MonoBehaviour
     public List<Card_Hardware> hardwareCards;
     public List<Card_Resource> resourceCards;
 
-    public int memoryUsed;
-
 	private void Awake()
 	{
         instance = this;
@@ -38,7 +36,6 @@ public class RunnerRIG : MonoBehaviour
 		{
             Card_Program programCard = (Card_Program)installableCard;
             AddCardToPrograms(programCard);
-            //memoryUsed++;
         }
         else if (card.cardType == CardType.Hardware)
         {
@@ -56,18 +53,18 @@ public class RunnerRIG : MonoBehaviour
 
     public void AddCardToPrograms(Card_Program programCard)
 	{
-        programCard.transform.SetParent(programsT, false);
+        programCard.ParentCardTo(programsT);
     }
 
     public void AddCardToHardwares(Card_Hardware hardwareCard)
     {
-        hardwareCard.transform.SetParent(hardwaresT, false);
+        hardwareCard.ParentCardTo(hardwaresT);
     }
 
 
     public void AddCardToResources(Card_Resource resourceCard)
     {
-        resourceCard.transform.SetParent(resourcesT, false);
+        resourceCard.ParentCardTo(resourcesT);
     }
 
 

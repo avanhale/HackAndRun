@@ -8,12 +8,19 @@ public class Card_Identity : Card
     [Header("Identity")]
     public string cardSubTitle;
     public TextMeshProUGUI subTitleText;
+    public TextMeshProUGUI linkStrengthText;
+    public int baseLinkStrength;
 
-
-
-    // Update is called once per frame
-    void Update()
-    {
-        
+	protected override void Start()
+	{
+		base.Start();
+        UpdateLinkStrengthText();
     }
+
+
+    void UpdateLinkStrengthText()
+    {
+        linkStrengthText.text = baseLinkStrength.ToString();
+    }
+
 }

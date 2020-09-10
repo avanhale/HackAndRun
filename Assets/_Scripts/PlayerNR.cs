@@ -15,6 +15,7 @@ public class PlayerNR : MonoBehaviour
     public Card[] deckCards;
 
 
+    int maximumHandSize = 5;
 
     [Header("Data")]
     [SerializeField]
@@ -23,7 +24,8 @@ public class PlayerNR : MonoBehaviour
 	{
         get { return credits; }
         set { credits = value;
-            OnCreditsChanged?.Invoke(); }
+            OnCreditsChanged?.Invoke();
+        }
 	}
     public delegate void ValueChanged();
     public event ValueChanged OnCreditsChanged;
@@ -34,7 +36,8 @@ public class PlayerNR : MonoBehaviour
 	{
         get { return actionPoints; }
         set { actionPoints = value;
-            OnActionPointsChanged?.Invoke(); }
+            OnActionPointsChanged?.Invoke();
+        }
 	}
     public event ValueChanged OnActionPointsChanged;
 
@@ -45,15 +48,49 @@ public class PlayerNR : MonoBehaviour
 	{
         get { return memoryUnitsTotal; }
         set { memoryUnitsTotal = value;
-            OnMemoryUnitsTotalChanged?.Invoke(); }
+            OnMemoryChanged?.Invoke();
+        }
 	}
-    public event ValueChanged OnMemoryUnitsTotalChanged;
+
+    [SerializeField]
+    int memoryUnitsAvailable;
+    public int MemoryUnitsAvailable
+    {
+        get { return memoryUnitsAvailable; }
+        set
+        {
+            memoryUnitsAvailable = value;
+            OnMemoryChanged?.Invoke();
+        }
+    }
+    public event ValueChanged OnMemoryChanged;
 
     [SerializeField]
     List<Card> cardsInHand = new List<Card>();
 
+    [SerializeField]
+    int linkStrength;
+    public int LinkStrength
+	{
+        get { return linkStrength; }
+        set { linkStrength = value;
+            OnLinkStrengthChanged?.Invoke();
+        }
+	}
+    public event ValueChanged OnLinkStrengthChanged;
 
-    int maximumHandSize = 5;
+    [SerializeField]
+    int tags;
+    public int Tags
+    {
+        get { return tags; }
+        set
+        {
+            tags = value;
+            OnTagsChanged?.Invoke();
+        }
+    }
+    public event ValueChanged OnTagsChanged;
 
 
     private void Awake()
@@ -78,13 +115,14 @@ public class PlayerNR : MonoBehaviour
     public void GatherPlayer()
 	{
         playerSide = e_PlayerDeck.playerSide;
-	}
+    }
 
     public void SetPlayerCards(Card_Identity _identity, Card[] _deckCards)
 	{
         identity = _identity;
         deckCards = _deckCards;
-	}
+        LinkStrength = _identity.baseLinkStrength;
+    }
 
     public bool IsRunner()
     {
@@ -97,8 +135,10 @@ public class PlayerNR : MonoBehaviour
         Credits += numCredits;
 	}
 
-
-
+    public bool CanAffordCost(int cost)
+	{
+        return Credits >= cost;
+	}
 
 
     public bool CanAffordAction(int numActions)
@@ -120,25 +160,11 @@ public class PlayerNR : MonoBehaviour
         ActionPoints -= numActions;
     }
 
-
-
-
-    public bool HasEnoughMemory(int amountMemory)
+    public void AddTotalMemory(int amountMemory)
 	{
-        return MemoryAvailable() >= amountMemory;
+        MemoryUnitsTotal += amountMemory;
+        MemoryUnitsAvailable += amountMemory;
 	}
-
-    public int MemoryAvailable()
-	{
-        return memoryUnitsTotal - RunnerRIG.instance.memoryUsed;
-	}
-
-    public void MemoryUsed(int amountMemory)
-	{
-        MemoryUnitsTotal -= amountMemory;
-	}
-
-
 
     public void AddCardsToHand(params Card[] cards)
     {
@@ -164,6 +190,16 @@ public class PlayerNR : MonoBehaviour
         return cardsInHand.Contains(card);
     }
 
+
+    public void AddTags(int numTags)
+	{
+        Tags += numTags;
+	}
+
+    public void RemoveTags(int numTags)
+	{
+        Tags -= numTags;
+	}
 
 
 

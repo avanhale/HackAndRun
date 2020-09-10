@@ -49,7 +49,7 @@ public enum CardSubType
     Job, Connection, Location, Link,
 
     // Program
-    Worm,
+    Icebreaker,
 
     // Event
     

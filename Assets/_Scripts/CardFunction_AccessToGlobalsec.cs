@@ -27,7 +27,7 @@ public class CardFunction_AccessToGlobalsec : CardFunction
 
 	void AddLink()
 	{
-		print("Add LINKE!");
+		PlayerNR.Runner.LinkStrength += amountLinks;
 	}
 
 }

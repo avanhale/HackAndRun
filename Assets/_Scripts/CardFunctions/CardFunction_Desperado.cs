@@ -43,7 +43,7 @@ public class CardFunction_Desperado : CardFunction
 
 	void AddMemory()
 	{
-		PlayerNR.Runner.MemoryUnitsTotal += amountMemory;
+		PlayerNR.Runner.AddTotalMemory(amountMemory);
 	}
 
 	void GainCredits()

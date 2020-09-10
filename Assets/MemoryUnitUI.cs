@@ -15,25 +15,18 @@ public class MemoryUnitUI : MonoBehaviour
 
     private void OnEnable()
     {
-        myPlayer.OnMemoryUnitsTotalChanged += MyPlayer_OnMemoryUnitsTotalChanged;
-		PlayCardManager.OnCardInstalled += PlayCardManager_OnCardInstalled;
+        myPlayer.OnMemoryChanged += MyPlayer_OnMemoryUnitsTotalChanged;
     }
 
 	private void OnDisable()
     {
-        myPlayer.OnMemoryUnitsTotalChanged -= MyPlayer_OnMemoryUnitsTotalChanged;
-		PlayCardManager.OnCardInstalled -= PlayCardManager_OnCardInstalled;
+        myPlayer.OnMemoryChanged -= MyPlayer_OnMemoryUnitsTotalChanged;
     }
 
     void MyPlayer_OnMemoryUnitsTotalChanged()
 	{
         UpdateMemoryUnitButtons();
 	}
-
-    private void PlayCardManager_OnCardInstalled(Card card, bool success)
-    {
-        UpdateMemoryUnitButtons();
-    }
 
     void UpdateMemoryUnitButtons()
     {
@@ -44,7 +37,7 @@ public class MemoryUnitUI : MonoBehaviour
             memoryUnitButtons[i].gameObject.SetActive(false);
         }
 
-        int memoryAvailable = myPlayer.MemoryAvailable();
+        int memoryAvailable = myPlayer.MemoryUnitsAvailable;
         for (int i = 0; i < myPlayer.MemoryUnitsTotal; i++)
         {
             int targetIndex = memoryUnitButtons.Length - (i + 1);

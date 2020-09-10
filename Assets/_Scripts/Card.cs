@@ -7,12 +7,13 @@ using DG.Tweening;
 public abstract class Card : MonoBehaviour, ISelectableNR
 {
     CardReferences cardRefs;
-    CardFunction cardFunction;
+    protected CardFunction cardFunction;
     [HideInInspector]
     public CardCost cardCost;
 
     [Header("Card Data")]
     public PlayerSide playerSide;
+    protected PlayerNR myPlayer;
     public CardType cardType;
     public CardSubType cardSubType;
     public string cardTitle;
@@ -30,6 +31,7 @@ public abstract class Card : MonoBehaviour, ISelectableNR
         cardRefs = GetComponent<CardReferences>();
         cardFunction = GetComponent<CardFunction>();
         cardCost = GetComponent<CardCost>();
+        myPlayer = playerSide == PlayerSide.Runner ? PlayerNR.Runner : PlayerNR.Corporation;
     }
 
 	protected virtual void OnEnable()
@@ -104,6 +106,17 @@ public abstract class Card : MonoBehaviour, ISelectableNR
         UpdateCardFlipDisplay();
 	}
 
+    public void FlipCardUp()
+	{
+        isFaceUp = true;
+        UpdateCardFlipDisplay();
+	}
+    public void FlipCardDown()
+    {
+        isFaceUp = false;
+        UpdateCardFlipDisplay();
+    }
+
     void UpdateCardFlipDisplay()
 	{
         if (isFaceUp)
@@ -148,18 +161,17 @@ public abstract class Card : MonoBehaviour, ISelectableNR
 
     public void ActivateCardFromHand()
 	{
-        if (cardType == CardType.Program ||
-            cardType == CardType.Hardware ||
-            cardType == CardType.Resource)
+        if (this is IInstallable)
 		{
-            InstallCard();
+            IInstallable installable = this as IInstallable;
+            PlayCardManager.instance.TryInstallCard(installable);
 		}
-	}
-
-    public virtual void InstallCard()
-	{
-	}
-
+		else if (this is IActivateable)
+		{
+            IActivateable activateable = this as IActivateable;
+            PlayCardManager.instance.TryActivateEvent(activateable);
+        }
+    }
 
 
 	//private void OnValidate()
@@ -168,4 +180,16 @@ public abstract class Card : MonoBehaviour, ISelectableNR
 	//}
 
 
+}
+
+
+
+static class CardExtensions
+{
+    public static void ParentCardTo(this Card card, Transform parent)
+	{
+        card.transform.localScale = Vector3.one;
+        card.transform.SetParent(parent, false);
+        card.transform.localPosition = Vector3.zero;
+    }
 }

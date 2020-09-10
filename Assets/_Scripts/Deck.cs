@@ -39,7 +39,7 @@ public class Deck : MonoBehaviour, ISelectableNR
         // Reverse because lowest in hierarchy is visually on top of deck (first card, last child)
         for (int i = cardsInDeck.Count-1; i >= 0; i--)
 		{
-            cardsInDeck[i].transform.SetParent(cardsParentT, false);
+            cardsInDeck[i].ParentCardTo(cardsParentT);
         }
     }
 

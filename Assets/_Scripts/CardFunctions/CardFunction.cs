@@ -34,5 +34,10 @@ public abstract class CardFunction : MonoBehaviour
 
 	}
 
+	public virtual void ActivateFunction()
+	{
+
+	}
+
 
 }
