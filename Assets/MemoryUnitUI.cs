@@ -16,16 +16,24 @@ public class MemoryUnitUI : MonoBehaviour
     private void OnEnable()
     {
         myPlayer.OnMemoryUnitsTotalChanged += MyPlayer_OnMemoryUnitsTotalChanged;
+		PlayCardManager.OnCardInstalled += PlayCardManager_OnCardInstalled;
     }
-    private void OnDisable()
+
+	private void OnDisable()
     {
         myPlayer.OnMemoryUnitsTotalChanged -= MyPlayer_OnMemoryUnitsTotalChanged;
+		PlayCardManager.OnCardInstalled -= PlayCardManager_OnCardInstalled;
     }
 
     void MyPlayer_OnMemoryUnitsTotalChanged()
 	{
         UpdateMemoryUnitButtons();
 	}
+
+    private void PlayCardManager_OnCardInstalled(Card card, bool success)
+    {
+        UpdateMemoryUnitButtons();
+    }
 
     void UpdateMemoryUnitButtons()
     {

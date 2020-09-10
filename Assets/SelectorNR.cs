@@ -8,7 +8,7 @@ public class SelectorNR : MonoBehaviour
 {
     public Image highlighter;
     public UnityEvent onHighlighted, onClicked;
-    ISelectableNR selectable;
+    public ISelectableNR selectable;
     Color ogColor;
 
 	private void Awake()

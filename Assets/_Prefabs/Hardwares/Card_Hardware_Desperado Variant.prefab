@@ -1,5 +1,18 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!114 &8608010043261652073
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1988280350915621028}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ae352a0b86b8fe246bb1bd5a89f5f1a1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  amountMemory: 1
 --- !u!1001 &4000868943260479120
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -346,8 +359,19 @@ PrefabInstance:
       propertyPath: costOfCard
       value: 3
       objectReference: {fileID: 0}
+    - target: {fileID: 8902673882355674592, guid: fd641e2e93152164994b8303fecad062,
+        type: 3}
+      propertyPath: costOfCard
+      value: 3
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: fd641e2e93152164994b8303fecad062, type: 3}
+--- !u!1 &1988280350915621028 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2809042531540377296, guid: fd641e2e93152164994b8303fecad062,
+    type: 3}
+  m_PrefabInstance: {fileID: 4426039241597480564}
+  m_PrefabAsset: {fileID: 0}
 --- !u!224 &1988280349354720518 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 2809042532765668210, guid: fd641e2e93152164994b8303fecad062,

@@ -23,6 +23,9 @@ public class PlayCardManager : MonoBehaviour
         CORP_PURGE_VIRUSES = 6,
         CORP_TRASH_RESOURCE_TAGGED = 7;
 
+    public delegate void CardInstalled(Card card, bool installed);
+    public static event CardInstalled OnCardInstalled;
+
 
 
 	private void Awake()
@@ -93,6 +96,33 @@ public class PlayCardManager : MonoBehaviour
         }
 	}
 
+    public bool CanInstallCard(IInstallable installableCard)
+	{
+        return CanAffordAction(RUNNER_INSTALL) && installableCard.CanInstall();
+	}
+
+ //   public bool CanInstallCard(Card card)
+	//{
+ //       if (card.GetType() == typeof(Card_Program))
+ //       {
+ //           Card_Program program = (Card_Program)card;
+ //           // Check for memory usage too
+ //       }
+ //   }
+
+
+    public bool TryInstallCard(IInstallable installableCard)
+	{
+        if (installableCard.CanInstall())
+		{
+            Action_InstallCard(installableCard);
+            Card card = (Card)installableCard;
+            PayCostOfCard(card);
+            return true;
+		}
+        return false;
+	}
+
 
 
 	#region Actions
@@ -110,6 +140,23 @@ public class PlayCardManager : MonoBehaviour
         GainCredit();
     }
 
+    void Action_InstallCard(IInstallable installableCard)
+	{
+        int costOfAction = PlayArea.instance.CostOfAction(PlayerNR.Runner, RUNNER_INSTALL);
+        PlayerNR.Runner.ActionPointsUsed(costOfAction);
+        InstallCard(installableCard);
+    }
+
+
+    void PayCostOfCard(Card card)
+	{
+        int balance = PlayerNR.Runner.Credits;
+        if (card.cardCost.TryBuyCard(ref balance))
+        {
+            PlayerNR.Runner.Credits = balance;
+        }
+        else print("Did not pay for card!!!");
+	}
 
     #endregion
 
@@ -122,6 +169,12 @@ public class PlayCardManager : MonoBehaviour
 	{
         PlayerNR.Runner.AddCredits(1);
 	}
+
+    void InstallCard(IInstallable installableCard)
+	{
+        RunnerRIG.instance.InstallCard(installableCard);
+        OnCardInstalled?.Invoke((Card)installableCard, true);
+    }
 
 
     public void StartTurn(PlayerNR playerTurn)

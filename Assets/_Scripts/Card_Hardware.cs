@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Card_Hardware : Card
+public class Card_Hardware : Card, IInstallable
 {
 
 	protected override void Awake()
@@ -22,4 +22,21 @@ public class Card_Hardware : Card
     {
         
     }
+
+
+
+	public override bool CanSelect()
+	{
+		return PlayCardManager.instance.CanInstallCard(this);
+	}
+
+	public bool CanInstall()
+	{
+		return cardCost.CanAffordCard(PlayerNR.Runner.Credits);
+	}
+
+	public override void InstallCard()
+	{
+		PlayCardManager.instance.TryInstallCard(this);
+	}
 }

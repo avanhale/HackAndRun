@@ -2,28 +2,13 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CardFunction_Desperado : CardFunction
+public class CardFunction_AccessToGlobalsec : CardFunction
 {
-	public int amountMemory;
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
-
+	public int amountLinks;
 	protected override void SubscribeToConditions()
 	{
 		base.SubscribeToConditions();
 		PlayCardManager.OnCardInstalled += PlayCardManager_OnCardInstalled;
-		// Make Successful Run
-		//GainCredits();
 	}
 
 	protected override void UnSubscribeToConditions()
@@ -36,20 +21,13 @@ public class CardFunction_Desperado : CardFunction
 	{
 		if (card == this.card)
 		{
-			AddMemory();
+			AddLink();
 		}
 	}
 
-
-	void AddMemory()
+	void AddLink()
 	{
-		PlayerNR.Runner.MemoryUnitsTotal += amountMemory;
+		print("Add LINKE!");
 	}
-
-	void GainCredits()
-	{
-
-	}
-
 
 }

@@ -11,9 +11,6 @@ public class GameManager : MonoBehaviour
     public delegate void RunFinished(bool success, int serverType);
     public static event RunFinished OnRunFinished;
 
-    public delegate void CardInstallation(Card card, bool installed);
-    public static event CardInstallation OnCardInstallation;
-
     [Header("Game Data")]
     public int numCardsToDrawFirstHand;
     public int numCreditsToStartWith;

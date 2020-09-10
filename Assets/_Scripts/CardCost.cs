@@ -5,7 +5,7 @@ using UnityEngine;
 public class CardCost : MonoBehaviour
 {
 
-    public int costOfCard;
+    public int costOfCard = 0;
 
     public bool CanAffordCard(int balance)
 	{

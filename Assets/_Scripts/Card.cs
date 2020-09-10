@@ -8,7 +8,8 @@ public abstract class Card : MonoBehaviour, ISelectableNR
 {
     CardReferences cardRefs;
     CardFunction cardFunction;
-    CardCost cardCost;
+    [HideInInspector]
+    public CardCost cardCost;
 
     [Header("Card Data")]
     public PlayerSide playerSide;
@@ -17,6 +18,7 @@ public abstract class Card : MonoBehaviour, ISelectableNR
     public string cardTitle;
 
     [Header("Play Data")]
+    [HideInInspector]
     public bool isFaceUp = true;
     float cardFlipTransitionTime = 1f;
 
@@ -30,12 +32,25 @@ public abstract class Card : MonoBehaviour, ISelectableNR
         cardCost = GetComponent<CardCost>();
     }
 
+	protected virtual void OnEnable()
+	{
+		PlayCardManager.OnCardInstalled += OnCardInstalled;
+	}
+    protected virtual void OnDisable()
+    {
+        PlayCardManager.OnCardInstalled -= OnCardInstalled;
+    }
+    protected virtual void OnCardInstalled(Card card, bool installed)
+	{
+
+	}
+
 	// Start is called before the first frame update
 	protected virtual void Start()
     {
         UpdateCardTitle();
         UpdateCardTypes();
-        if (cardCost) UpdateCardCost();
+        UpdateCardCost();
     }
 
     // Update is called once per frame
@@ -112,7 +127,7 @@ public abstract class Card : MonoBehaviour, ISelectableNR
         return true;
 	}
 
-	public bool CanSelect()
+	public virtual bool CanSelect()
 	{
         return true;
 	}
@@ -141,9 +156,8 @@ public abstract class Card : MonoBehaviour, ISelectableNR
 		}
 	}
 
-    public void InstallCard()
+    public virtual void InstallCard()
 	{
-        RunnerRIG.instance.InstallCard(this);
 	}
 
 
