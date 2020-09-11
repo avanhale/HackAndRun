@@ -1,16 +1,9 @@
 ﻿using UnityEngine;
 using TMPro;
 
-public class CreditsUI : MonoBehaviour
+public class CreditsUI : PlayArea_Spot
 {
-    public PlayerSide myPlayerSide;
 	public TextMeshProUGUI creditsText;
-	PlayerNR myPlayer;
-
-	private void Awake()
-	{
-		myPlayer = myPlayerSide == PlayerSide.Runner ? PlayerNR.Runner : PlayerNR.Corporation;
-	}
 
 	private void OnEnable()
 	{

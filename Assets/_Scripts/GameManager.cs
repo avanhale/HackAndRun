@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using Unity.Collections.LowLevel.Unsafe;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour
@@ -24,7 +25,15 @@ public class GameManager : MonoBehaviour
 	// Start is called before the first frame update
 	void Start()
     {
-        SpawnAndSetCards();
+        StartCoroutine(StartGame());
+    }
+
+    IEnumerator StartGame()
+	{
+        yield return new WaitForSeconds(1);
+
+        SpawnAndSetCards(PlayerNR.Runner);
+        SpawnAndSetCards(PlayerNR.Corporation);
         SetPlayerCredits(PlayerNR.Runner, numCreditsToStartWith);
         DrawFirstHands();
         StartNextTurn();
@@ -39,12 +48,12 @@ public class GameManager : MonoBehaviour
 
 
 
-    void SpawnAndSetCards()
+    void SpawnAndSetCards(PlayerNR player)
 	{
         // Runner
-        Card_Identity runnerIdentity = Instantiate(PlayerNR.Runner.e_PlayerDeck.identityCard);
+        Card_Identity identityCard = Instantiate(player.e_PlayerDeck.identityCard);
 
-        Card[] e_deckCards = PlayerNR.Runner.e_PlayerDeck.deckCards;
+        Card[] e_deckCards = player.e_PlayerDeck.deckCards;
         int numCards = e_deckCards.Length;
         Card[] deckCards = new Card[numCards];
 		for (int i = 0; i < numCards; i++)
@@ -53,8 +62,8 @@ public class GameManager : MonoBehaviour
             deckCards[i] = card;
 		}
 
-        PlayerNR.Runner.SetPlayerCards(runnerIdentity, deckCards);
-        PlayArea.instance.SetCardsToSpots(PlayerNR.Runner);
+        player.SetPlayerCards(identityCard, deckCards);
+        PlayArea.instance.SetCardsToSpots(player);
 
 	}
 
@@ -66,17 +75,26 @@ public class GameManager : MonoBehaviour
 
     void DrawFirstHands()
 	{
-        PlayCardManager.instance.DrawCards(numCardsToDrawFirstHand);
-	}
+        PlayCardManager.instance.DrawCards(PlayerNR.Corporation, numCardsToDrawFirstHand);
+        PlayCardManager.instance.DrawCards(PlayerNR.Runner, numCardsToDrawFirstHand);
+    }
 
-    
+
     void StartNextTurn()
 	{
         PlayCardManager.instance.StartTurn(currentTurnSide == PlayerSide.Runner ? PlayerNR.Runner : PlayerNR.Corporation);
 	}
 
 
+    public bool IsCurrentTurn(PlayerSide playerSide)
+	{
+        return currentTurnSide == playerSide;
+	}
 
+    public PlayerNR CurrentTurnPlayer()
+	{
+        return currentTurnSide == PlayerSide.Runner ? PlayerNR.Runner : PlayerNR.Corporation;
+	}
 
 
 }

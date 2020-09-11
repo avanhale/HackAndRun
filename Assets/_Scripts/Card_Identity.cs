@@ -17,8 +17,7 @@ public class Card_Identity : Card
         UpdateLinkStrengthText();
     }
 
-
-    void UpdateLinkStrengthText()
+	void UpdateLinkStrengthText()
     {
         linkStrengthText.text = baseLinkStrength.ToString();
     }

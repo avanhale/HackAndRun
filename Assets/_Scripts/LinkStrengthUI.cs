@@ -3,15 +3,13 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 
-public class LinkStrengthUI : MonoBehaviour
+public class LinkStrengthUI : PlayArea_Spot
 {
-	public PlayerSide playerSide;
-	PlayerNR myPlayer;
 	public TextMeshProUGUI linkStrengthText;
 
-	private void Awake()
+	protected override void Awake()
 	{
-        myPlayer = playerSide == PlayerSide.Runner ? PlayerNR.Runner : PlayerNR.Corporation;
+		base.Awake();
 	}
 	protected void OnEnable()
 	{

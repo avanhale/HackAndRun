@@ -54,18 +54,17 @@ public class PlayCardManager : MonoBehaviour
     }
 
 
-    public void DrawCards(int numberOfCards)
+    public void DrawCards(PlayerNR player, int numberOfCards)
 	{
         Card[] drawnCards = new Card[numberOfCards];
 		for (int i = 0; i < numberOfCards; i++)
 		{
-            Card drawnCard = PlayArea.instance.DrawCardFromDeck(PlayerNR.Runner);
+            Card drawnCard = PlayArea.instance.DrawCardFromDeck(player);
             drawnCards[i] = drawnCard;
             drawnCard.FlipCard();
 		}
 
-        PlayerNR.Runner.AddCardsToHand(drawnCards);
-
+        player.AddCardsToHand(drawnCards);
 	}
 
     public bool TryDrawNextCard()
@@ -167,9 +166,10 @@ public class PlayCardManager : MonoBehaviour
     #region Actions
     void Action_DrawNextCard()
 	{
+        PlayerNR player = GameManager.instance.CurrentTurnPlayer();
         int costOfAction = PlayArea.instance.CostOfAction(PlayerNR.Runner, RUNNER_DRAW_CARD);
-        PlayerNR.Runner.ActionPointsUsed(costOfAction);
-        DrawNextCard();
+        player.ActionPointsUsed(costOfAction);
+        DrawNextCard(player);
     }
 
     void Action_GainCredit()
@@ -227,9 +227,9 @@ public class PlayCardManager : MonoBehaviour
 
     #endregion
 
-    void DrawNextCard()
+    void DrawNextCard(PlayerNR player)
 	{
-        DrawCards(1);
+        DrawCards(player, 1);
     }
 
     void GainCredit()

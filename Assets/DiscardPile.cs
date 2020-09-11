@@ -2,11 +2,17 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class DiscardPile : MonoBehaviour
+public class DiscardPile : PlayArea_Spot
 {
     public Transform cardsParentT;
-    // Start is called before the first frame update
-    void Start()
+
+	protected override void Awake()
+	{
+		base.Awake();
+    }
+
+	// Start is called before the first frame update
+	void Start()
     {
         
     }

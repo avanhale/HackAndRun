@@ -3,15 +3,13 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 
-public class TagsUI : MonoBehaviour, ISelectableNR
+public class TagsUI : PlayArea_Spot, ISelectableNR
 {
-	public PlayerSide playerSide;
-	PlayerNR myPlayer;
 	public TextMeshProUGUI tagsText;
 
-	private void Awake()
+	protected override void Awake()
 	{
-		myPlayer = playerSide == PlayerSide.Runner ? PlayerNR.Runner : PlayerNR.Corporation;
+		base.Awake();
 	}
 
 	private void OnEnable()

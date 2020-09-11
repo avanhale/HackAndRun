@@ -1,19 +1,17 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 
-public class MemoryUnitUI : MonoBehaviour
+public class MemoryUnitUI : PlayArea_Spot
 {
-    public PlayerSide playerSide;
-    PlayerNR myPlayer;
     Button[] memoryUnitButtons;
 
-	private void Awake()
+	protected override void Awake()
 	{
-        myPlayer = playerSide == PlayerSide.Runner ? PlayerNR.Runner : PlayerNR.Corporation;
+        base.Awake();
         GetMemoryUnitButtons();
     }
 
-    private void OnEnable()
+	private void OnEnable()
     {
         myPlayer.OnMemoryChanged += MyPlayer_OnMemoryUnitsTotalChanged;
     }

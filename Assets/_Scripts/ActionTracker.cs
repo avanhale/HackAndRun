@@ -1,18 +1,15 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 
-public class ActionTracker : MonoBehaviour
+public class ActionTracker : PlayArea_Spot
 {
-    public PlayerSide playerSide;
-    PlayerNR myPlayer;
     Button[] actionPointButtons;
 
-
-	private void Awake()
+	protected override void Awake()
 	{
-        myPlayer = playerSide == PlayerSide.Runner ? PlayerNR.Runner : PlayerNR.Corporation;
+		base.Awake();
         GetActionPointButtons();
-    }
+	}
 
 	private void OnEnable()
 	{

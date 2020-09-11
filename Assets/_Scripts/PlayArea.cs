@@ -8,11 +8,16 @@ public class PlayArea : MonoBehaviour
     public static PlayArea instance;
 
     [Header("Corporation Spots")]
-    public RectTransform corpIdentityT;
+    public IdentitySpot corpIdentity;
+    public Deck corpDeck;
+    public Hand corpHand;
 
+    public ActionTracker corpActionTracker;
+    public ActionsReferenceCard corpActionsReferenceCard;
+    public DiscardPile corpDiscardPile;
 
     [Header("Runner Spots")]
-    public RectTransform runnerIdentityT;
+    public IdentitySpot runnerIdentity;
     public Deck runnerDeck;
     public Hand runnerHand;
     public ActionTracker runnerActionTracker;
@@ -23,59 +28,44 @@ public class PlayArea : MonoBehaviour
     private void Awake()
     {
         instance = this;
-        Canvas.ForceUpdateCanvases();
+        GetAllReferences();
     }
 
 
     // Start is called before the first frame update
     void Start()
     {
-        Canvas.ForceUpdateCanvases();
 
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.B))
-        {
-            foreach (var rt in GetComponentsInChildren<RectTransform>())
-            {
-                rt.ForceUpdateRectTransforms();
-            }
-        }
+
     }
 
-
+    
     public void SetCardsToSpots(PlayerNR player)
     {
-        if (player.IsRunner())
-        {
-            player.identity.transform.SetParent(runnerIdentityT, false);
-            runnerDeck.SetCardsToDeck(player.deckCards);
-            //runnerHand.AddCardsToHand(player.)
-        }
+        IdentitySpot identity = IdentityNR(player);
+        identity.SetIdentityCard(player.identity);
+        DeckNR(player).SetCardsToDeck(player.deckCards);
     }
 
     public void AddCardsToHand(PlayerNR player, Card[] cards)
     {
-        if (player.IsRunner())
-        {
-            runnerHand.AddCardsToHand(cards);
-        }
+        Hand hand = HandNR(player);
+        hand.AddCardsToHand(cards);
     }
 
     public Card DrawCardFromDeck(PlayerNR player)
     {
-        if (player.IsRunner())
+        Deck deck = DeckNR(player);
+        Card drawnCard = null;
+        if (deck.DrawNextCard(ref drawnCard))
         {
-            Card drawnCard = null;
-            if (runnerDeck.DrawNextCard(ref drawnCard))
-            {
-                return drawnCard;
-            }
+            return drawnCard;
         }
-
         return null;
     }
 
@@ -96,5 +86,73 @@ public class PlayArea : MonoBehaviour
         }
 
     }
+
+
+	#region
+
+    public IdentitySpot IdentityNR(PlayerNR player)
+	{
+        return player.IsRunner() ? runnerIdentity : corpIdentity;
+    }
+
+    public Deck DeckNR(PlayerNR player)
+	{
+        return player.IsRunner() ? runnerDeck : corpDeck;
+    }
+
+    public Hand HandNR(PlayerNR player)
+	{
+        return player.IsRunner() ? runnerHand : corpHand;
+    }
+
+
+    #endregion
+
+
+
+    void GetAllReferences()
+    {
+		foreach (var spot in GetComponentsInChildren<PlayArea_Spot>())
+		{
+            if (spot is IdentitySpot)
+            {
+                IdentitySpot identity = spot as IdentitySpot;
+                if (spot.myPlayer.IsRunner()) runnerIdentity = identity;
+                else corpIdentity = identity;
+            }
+            else if (spot is Deck)
+			{
+                Deck deck = spot as Deck;
+                if (spot.myPlayer.IsRunner()) runnerDeck = deck;
+                else corpDeck = deck;
+			}
+            else if (spot is Hand)
+			{
+                Hand hand = spot as Hand;
+                if (spot.myPlayer.IsRunner()) runnerHand = hand;
+                else corpHand = hand;
+            }
+            else if (spot is ActionTracker)
+            {
+                ActionTracker tracker = spot as ActionTracker;
+                if (spot.myPlayer.IsRunner()) runnerActionTracker = tracker;
+                else corpActionTracker = tracker;
+            }
+            else if (spot is ActionsReferenceCard)
+            {
+                ActionsReferenceCard referenceCard = spot as ActionsReferenceCard;
+                if (spot.myPlayer.IsRunner()) runnerActionsReferenceCard = referenceCard;
+                else corpActionsReferenceCard = referenceCard;
+            }
+            else if (spot is DiscardPile)
+            {
+                DiscardPile discardPile = spot as DiscardPile;
+                if (spot.myPlayer.IsRunner()) runnerDiscardPile = discardPile;
+                else corpDiscardPile = discardPile;
+            }
+        }
+    }
+
+
 
 }

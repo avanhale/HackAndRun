@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
 
-public class ActionsReferenceCard : MonoBehaviour
+public class ActionsReferenceCard : PlayArea_Spot
 {
     public bool isShowing;
     RectTransform rectTransform;
@@ -12,8 +12,9 @@ public class ActionsReferenceCard : MonoBehaviour
     [Header("Action Point Costs")]
     public int[] actionPointCosts;
 
-	private void Awake()
+	protected override void Awake()
 	{
+		base.Awake();
         rectTransform = GetComponent<RectTransform>();
     }
 

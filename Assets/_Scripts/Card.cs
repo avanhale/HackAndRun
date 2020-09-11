@@ -188,8 +188,10 @@ static class CardExtensions
 {
     public static void ParentCardTo(this Card card, Transform parent)
 	{
+        RectTransform rt = card.GetComponent<RectTransform>();
         card.transform.localScale = Vector3.one;
         card.transform.SetParent(parent, false);
-        card.transform.localPosition = Vector3.zero;
+        rt.anchorMin = rt.anchorMax = Vector2.one * 0.5f;
+        rt.anchoredPosition = Vector3.zero;
     }
 }
