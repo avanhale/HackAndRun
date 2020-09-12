@@ -71,11 +71,8 @@ public class PlayArea : MonoBehaviour
 
     public int CostOfAction(PlayerNR player, int actionIndex)
     {
-        if (player.IsRunner())
-        {
-            return runnerActionsReferenceCard.CostOfAction(actionIndex);
-        }
-        return -123;
+        return runnerActionsReferenceCard.CostOfAction(actionIndex);
+        //return -123;
     }
 
     public void SendCardToDiscard(PlayerNR player, Card card)

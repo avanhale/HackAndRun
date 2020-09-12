@@ -1,25 +1,25 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!114 &6619977738666113568
+--- !u!114 &8673850934697201162
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2809042531540377296}
+  m_GameObject: {fileID: 8616847852173567631}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4e76590b415f41d40bde5841be6d8154, type: 3}
+  m_Script: {fileID: 11500000, guid: 3c363e6310ff817449e632eeb6c0c0d0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   cardCost: {fileID: 0}
-  playerSide: 1
+  playerSide: 0
   myPlayer: {fileID: 0}
-  cardType: 7
+  cardType: 2
   cardSubType: 0
   cardTitle: 
   isFaceUp: 1
---- !u!1001 &3864848811809471676
+--- !u!1001 &7263245992201766115
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
@@ -43,12 +43,12 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1394157416794081577, guid: 2c36707fb223ee34abbe5e7dadfa2f11,
         type: 3}
-      propertyPath: m_SizeDelta.x
+      propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1394157416794081577, guid: 2c36707fb223ee34abbe5e7dadfa2f11,
         type: 3}
-      propertyPath: m_AnchoredPosition.y
+      propertyPath: m_SizeDelta.x
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1394157416794081577, guid: 2c36707fb223ee34abbe5e7dadfa2f11,
@@ -73,12 +73,12 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1394157417206425225, guid: 2c36707fb223ee34abbe5e7dadfa2f11,
         type: 3}
-      propertyPath: m_SizeDelta.x
+      propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1394157417206425225, guid: 2c36707fb223ee34abbe5e7dadfa2f11,
         type: 3}
-      propertyPath: m_AnchoredPosition.y
+      propertyPath: m_SizeDelta.x
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1394157417206425225, guid: 2c36707fb223ee34abbe5e7dadfa2f11,
@@ -89,7 +89,7 @@ PrefabInstance:
     - target: {fileID: 1394157417265357420, guid: 2c36707fb223ee34abbe5e7dadfa2f11,
         type: 3}
       propertyPath: m_Name
-      value: Card_Hardware Variant
+      value: Card_Operation Variant
       objectReference: {fileID: 0}
     - target: {fileID: 1394157417265357421, guid: 2c36707fb223ee34abbe5e7dadfa2f11,
         type: 3}
@@ -196,12 +196,11 @@ PrefabInstance:
       propertyPath: m_Pivot.y
       value: 0.5
       objectReference: {fileID: 0}
-    m_RemovedComponents:
-    - {fileID: 1394157417265357417, guid: 2c36707fb223ee34abbe5e7dadfa2f11, type: 3}
+    m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2c36707fb223ee34abbe5e7dadfa2f11, type: 3}
---- !u!1 &2809042531540377296 stripped
+--- !u!1 &8616847852173567631 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 1394157417265357420, guid: 2c36707fb223ee34abbe5e7dadfa2f11,
     type: 3}
-  m_PrefabInstance: {fileID: 3864848811809471676}
+  m_PrefabInstance: {fileID: 7263245992201766115}
   m_PrefabAsset: {fileID: 0}

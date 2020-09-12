@@ -5,7 +5,8 @@ using TMPro;
 
 public class Card_Program : Card, IInstallable
 {
-	public TextMeshProUGUI memorySpaceText;
+	public TextMeshProUGUI memorySpaceText, strengthText;
+	public int strength;
 
 	protected override void Awake()
 	{
@@ -16,6 +17,7 @@ public class Card_Program : Card, IInstallable
 	{
 		base.Start();
 		memorySpaceText.text = cardCost.memorySpaceCost.ToString();
+		strengthText.text = strength.ToString();
 	}
 
 
@@ -27,7 +29,7 @@ public class Card_Program : Card, IInstallable
 
 	public bool CanInstall()
 	{
-		return cardCost.CanAffordCard(PlayerNR.Runner.Credits)
+		return cardCost.CanAffordCard(myPlayer.Credits)
 			&& cardCost.CanUseMemorySpace(PlayerNR.Runner.MemoryUnitsAvailable);
 	}
 

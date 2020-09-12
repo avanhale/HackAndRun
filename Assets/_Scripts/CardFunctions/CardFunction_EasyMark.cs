@@ -15,7 +15,7 @@ public class CardFunction_EasyMark : CardFunction
 
 	void GainCredits()
 	{
-		PlayerNR.Runner.AddCredits(numCredits);
+		card.myPlayer.AddCredits(numCredits);
 	}
 
 

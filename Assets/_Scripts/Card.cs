@@ -13,7 +13,8 @@ public abstract class Card : MonoBehaviour, ISelectableNR
 
     [Header("Card Data")]
     public PlayerSide playerSide;
-    protected PlayerNR myPlayer;
+    [HideInInspector]
+    public PlayerNR myPlayer;
     public CardType cardType;
     public CardSubType cardSubType;
     public string cardTitle;
@@ -99,39 +100,40 @@ public abstract class Card : MonoBehaviour, ISelectableNR
 
     }
 
-
+    [ContextMenu("FlipCard")]
     public void FlipCard()
 	{
         isFaceUp = !isFaceUp;
         UpdateCardFlipDisplay();
 	}
 
-    public void FlipCardUp()
+    public void FlipCardUp(bool immediate = false)
 	{
         isFaceUp = true;
-        UpdateCardFlipDisplay();
+        UpdateCardFlipDisplay(immediate);
 	}
-    public void FlipCardDown()
+    public void FlipCardDown(bool immediate = false)
     {
         isFaceUp = false;
-        UpdateCardFlipDisplay();
+        UpdateCardFlipDisplay(immediate);
     }
 
-    void UpdateCardFlipDisplay()
+    void UpdateCardFlipDisplay(bool immediate = false)
 	{
+        float time = immediate ? 0 : cardFlipTransitionTime;
         if (isFaceUp)
 		{
-            transform.DOLocalRotate(Vector3.zero, cardFlipTransitionTime);
+            transform.DOLocalRotate(Vector3.zero, time);
 		}
         else
 		{
-            transform.DOLocalRotate(Vector3.up * 180, cardFlipTransitionTime);
+            transform.DOLocalRotate(Vector3.up * 180, time);
         }
     }
 
     public bool IsCardInHand()
 	{
-        return PlayerNR.Runner.IsCardInHand(this);
+        return myPlayer.IsCardInHand(this);
 	}
 
 

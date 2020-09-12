@@ -2,14 +2,12 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Card_Event : Card, IActivateable
+public class Card_Operation : Card, IActivateable
 {
-
-
-	public override bool CanSelect()
-	{
+    public override bool CanSelect()
+    {
         return PlayCardManager.instance.CanActivateEvent(this);
-	}
+    }
 
     public bool CanActivate()
     {
@@ -17,9 +15,8 @@ public class Card_Event : Card, IActivateable
     }
 
     public virtual void ActivateCard()
-	{
-		cardFunction.ActivateFunction();
-	}
+    {
+        cardFunction.ActivateFunction();
+    }
 
-	
 }

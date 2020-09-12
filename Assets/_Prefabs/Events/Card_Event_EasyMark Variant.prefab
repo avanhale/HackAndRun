@@ -102,11 +102,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8973013273714698891, guid: f2d750e949abee14691cbf22408fce6b,
         type: 3}
-      propertyPath: m_SizeDelta.x
-      value: 120
-      objectReference: {fileID: 0}
-    - target: {fileID: 8973013273714698891, guid: f2d750e949abee14691cbf22408fce6b,
-        type: 3}
       propertyPath: m_SizeDelta.y
       value: 0
       objectReference: {fileID: 0}
@@ -139,6 +134,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Pivot.y
       value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 8973013273714698891, guid: f2d750e949abee14691cbf22408fce6b,
+        type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 100
       objectReference: {fileID: 0}
     - target: {fileID: 8973013273907719791, guid: f2d750e949abee14691cbf22408fce6b,
         type: 3}

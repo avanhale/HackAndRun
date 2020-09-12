@@ -14,6 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cardCost: {fileID: 0}
   playerSide: 1
+  myPlayer: {fileID: 0}
   cardType: 8
   cardSubType: 0
   cardTitle: 
@@ -88,7 +89,7 @@ PrefabInstance:
     - target: {fileID: 1394157417265357420, guid: 2c36707fb223ee34abbe5e7dadfa2f11,
         type: 3}
       propertyPath: m_Name
-      value: Card_Resource
+      value: Card_Resource Variant
       objectReference: {fileID: 0}
     - target: {fileID: 1394157417265357421, guid: 2c36707fb223ee34abbe5e7dadfa2f11,
         type: 3}
@@ -158,7 +159,7 @@ PrefabInstance:
     - target: {fileID: 1394157417265357421, guid: 2c36707fb223ee34abbe5e7dadfa2f11,
         type: 3}
       propertyPath: m_SizeDelta.x
-      value: 120
+      value: 100
       objectReference: {fileID: 0}
     - target: {fileID: 1394157417265357421, guid: 2c36707fb223ee34abbe5e7dadfa2f11,
         type: 3}

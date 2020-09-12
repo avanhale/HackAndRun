@@ -71,16 +71,16 @@ public class PlayCardManager : MonoBehaviour
 	{
         if (CanDrawAnotherCard())
 		{
-            Action_DrawNextCard();
+            Action_DrawNextCard(GameManager.CurrentTurnPlayer);
             return true;
 		}
         return false;
 	}
 
-    public bool CanAffordAction(int actionIndex)
+    public bool CanAffordAction(PlayerNR player, int actionIndex)
 	{
-        int costOfAction = PlayArea.instance.CostOfAction(PlayerNR.Runner, actionIndex);
-        return PlayerNR.Runner.CanAffordAction(costOfAction);
+        int costOfAction = PlayArea.instance.CostOfAction(player, actionIndex);
+        return player.CanAffordAction(costOfAction);
 	}
 
     public bool CanAffordCost(int cost)
@@ -91,53 +91,61 @@ public class PlayCardManager : MonoBehaviour
     public bool CanDrawAnotherCard()
 	{
         //!PlayArea.instance.IsHandSizeMaxed(GameManager.instance.runner);
-        return CanAffordAction(RUNNER_DRAW_CARD);
+        return CanAffordAction(GameManager.CurrentTurnPlayer, RUNNER_DRAW_CARD);
     }
 
 
     public bool CanGainCredit()
 	{
-        return CanAffordAction(RUNNER_GAIN_CREDIT);
+        return CanAffordAction(GameManager.CurrentTurnPlayer, RUNNER_GAIN_CREDIT);
 	}
 
     public void TryGainCredit()
 	{
         if (CanGainCredit())
 		{
-            Action_GainCredit();
+            Action_GainCredit(GameManager.CurrentTurnPlayer);
         }
 	}
 
     public bool CanInstallCard(IInstallable installableCard)
 	{
-        return CanAffordAction(RUNNER_INSTALL) && installableCard.CanInstall();
+        int actionIndex = GameManager.CurrentTurnPlayer.IsRunner() ? RUNNER_INSTALL : CORP_INSTALL;
+        return CanAffordAction(GameManager.CurrentTurnPlayer, actionIndex) && installableCard.CanInstall();
 	}
 
     public bool TryInstallCard(IInstallable installableCard)
 	{
         if (CanInstallCard(installableCard))
 		{
-            Action_InstallCard(installableCard);
             Card card = (Card)installableCard;
-            PayCostOfCard(card);
-            UseMemorySpaceOfCard(card);
-            return true;
+            if (GameManager.CurrentTurnPlayer.IsRunner())
+            {
+                Action_InstallCard_Runner(installableCard);
+                PayCostOfCard(GameManager.CurrentTurnPlayer, card);
+                UseMemorySpaceOfCard(card);
+            }
+            else
+			{
+                Action_InstallCard_Corp(installableCard);
+            }
+                return true;
 		}
         return false;
 	}
 
     public bool CanActivateEvent(IActivateable activateableCard)
 	{
-        return CanAffordAction(RUNNER_EVENT) && activateableCard.CanActivate();
+        return CanAffordAction(GameManager.CurrentTurnPlayer, RUNNER_EVENT) && activateableCard.CanActivate();
 	}
 
     public bool TryActivateEvent(IActivateable activateableCard)
 	{
         if (CanActivateEvent(activateableCard))
 		{
-            Action_ActivateEvent(activateableCard);
+            Action_ActivateEvent(GameManager.CurrentTurnPlayer, activateableCard);
             Card card = (Card)activateableCard;
-            PayCostOfCard(card);
+            PayCostOfCard(GameManager.CurrentTurnPlayer, card);
             SendCardToDiscard(card);
         }
         return true;
@@ -145,7 +153,7 @@ public class PlayCardManager : MonoBehaviour
 
     public bool CanRemoveTag()
 	{
-        return CanAffordAction(RUNNER_REMOVE_TAG)
+        return CanAffordAction(PlayerNR.Runner, RUNNER_REMOVE_TAG)
             && CanAffordCost(2)
             && PlayerNR.Runner.Tags > 0;
     }
@@ -164,32 +172,38 @@ public class PlayCardManager : MonoBehaviour
 
 
     #region Actions
-    void Action_DrawNextCard()
+    void Action_DrawNextCard(PlayerNR player)
 	{
-        PlayerNR player = GameManager.instance.CurrentTurnPlayer();
-        int costOfAction = PlayArea.instance.CostOfAction(PlayerNR.Runner, RUNNER_DRAW_CARD);
+        int costOfAction = PlayArea.instance.CostOfAction(PlayerNR.Runner, player.IsRunner() ? RUNNER_DRAW_CARD : CORP_DRAW_CARD);
         player.ActionPointsUsed(costOfAction);
         DrawNextCard(player);
     }
 
-    void Action_GainCredit()
+    void Action_GainCredit(PlayerNR player)
 	{
-        int costOfAction = PlayArea.instance.CostOfAction(PlayerNR.Runner, RUNNER_GAIN_CREDIT);
-        PlayerNR.Runner.ActionPointsUsed(costOfAction);
-        GainCredit();
+        int costOfAction = PlayArea.instance.CostOfAction(player, player.IsRunner() ? RUNNER_GAIN_CREDIT : CORP_GAIN_CREDIT);
+        player.ActionPointsUsed(costOfAction);
+        GainCredit(GameManager.CurrentTurnPlayer);
     }
 
-    void Action_InstallCard(IInstallable installableCard)
+    void Action_InstallCard_Runner(IInstallable installableCard)
 	{
         int costOfAction = PlayArea.instance.CostOfAction(PlayerNR.Runner, RUNNER_INSTALL);
         PlayerNR.Runner.ActionPointsUsed(costOfAction);
-        InstallCard(installableCard);
+        InstallCard_Runner(installableCard);
     }
 
-    void Action_ActivateEvent(IActivateable activateableCard)
+    void Action_InstallCard_Corp(IInstallable installableCard)
+    {
+        int costOfAction = PlayArea.instance.CostOfAction(PlayerNR.Corporation, CORP_INSTALL);
+        PlayerNR.Corporation.ActionPointsUsed(costOfAction);
+        InstallCard_Corporation(installableCard);
+    }
+
+    void Action_ActivateEvent(PlayerNR player, IActivateable activateableCard)
 	{
-        int costOfAction = PlayArea.instance.CostOfAction(PlayerNR.Runner, RUNNER_EVENT);
-        PlayerNR.Runner.ActionPointsUsed(costOfAction);
+        int costOfAction = PlayArea.instance.CostOfAction(player, player.IsRunner() ? RUNNER_EVENT : CORP_OPERATION);
+        player.ActionPointsUsed(costOfAction);
         ActivateCard(activateableCard);
     }
 
@@ -205,12 +219,12 @@ public class PlayCardManager : MonoBehaviour
         PlayerNR.Runner.Credits -= cost;
 	}
 
-    void PayCostOfCard(Card card)
+    void PayCostOfCard(PlayerNR player, Card card)
 	{
-        int balance = PlayerNR.Runner.Credits;
+        int balance = player.Credits;
         if (card.cardCost.TryBuyCard(ref balance))
         {
-            PlayerNR.Runner.Credits = balance;
+            player.Credits = balance;
         }
         else print("Did not pay for card!!!");
 	}
@@ -232,16 +246,21 @@ public class PlayCardManager : MonoBehaviour
         DrawCards(player, 1);
     }
 
-    void GainCredit()
+    void GainCredit(PlayerNR player)
 	{
-        PlayerNR.Runner.AddCredits(1);
+        player.AddCredits(1);
 	}
 
-    void InstallCard(IInstallable installableCard)
+    void InstallCard_Runner(IInstallable installableCard)
 	{
         RunnerRIG.instance.InstallCard(installableCard);
         OnCardInstalled?.Invoke((Card)installableCard, true);
     }
+
+    void InstallCard_Corporation(IInstallable installableCard)
+	{
+        ServerSpace.instance.InstallCard(installableCard);
+	}
 
     void ActivateCard(IActivateable activateableCard)
 	{
@@ -272,7 +291,7 @@ public class PlayCardManager : MonoBehaviour
         }
         else
 		{
-            playerTurn.ActionPoints = 3;
+            playerTurn.ActionPoints = numActionPointsStart;
 		}
 	}
 

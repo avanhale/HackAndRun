@@ -10,7 +10,7 @@ public class Hand : PlayArea_Spot
     public float cardScaleInHand;
 
     [Header("Show Toggler")]
-    bool isShowing = true;
+    bool isShowing = false;
     RectTransform rt;
     public int showYValue, hideYValue;
     public float transitionTime;
@@ -20,6 +20,11 @@ public class Hand : PlayArea_Spot
 		base.Awake();
         rt = GetComponent<RectTransform>();
     }
+
+	private void Start()
+	{
+        ToggleShowing();
+	}
 
 	public void AddCardsToHand(params Card[] cards)
 	{

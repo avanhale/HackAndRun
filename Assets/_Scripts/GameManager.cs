@@ -7,6 +7,7 @@ public class GameManager : MonoBehaviour
 {
     public static GameManager instance;
     public PlayerSide currentTurnSide;
+    public static PlayerNR CurrentTurnPlayer;
 
 
     public delegate void RunFinished(bool success, int serverType);
@@ -20,10 +21,11 @@ public class GameManager : MonoBehaviour
     private void Awake()
 	{
         instance = this;
-	}
+        UpdateCurrentTurn(currentTurnSide);
+    }
 
-	// Start is called before the first frame update
-	void Start()
+    // Start is called before the first frame update
+    void Start()
     {
         StartCoroutine(StartGame());
     }
@@ -35,6 +37,7 @@ public class GameManager : MonoBehaviour
         SpawnAndSetCards(PlayerNR.Runner);
         SpawnAndSetCards(PlayerNR.Corporation);
         SetPlayerCredits(PlayerNR.Runner, numCreditsToStartWith);
+        SetPlayerCredits(PlayerNR.Corporation, numCreditsToStartWith);
         DrawFirstHands();
         StartNextTurn();
     }
@@ -82,8 +85,15 @@ public class GameManager : MonoBehaviour
 
     void StartNextTurn()
 	{
-        PlayCardManager.instance.StartTurn(currentTurnSide == PlayerSide.Runner ? PlayerNR.Runner : PlayerNR.Corporation);
+        UpdateCurrentTurn(currentTurnSide);
+        PlayCardManager.instance.StartTurn(CurrentTurnPlayer);
 	}
+
+    void UpdateCurrentTurn(PlayerSide side)
+	{
+        currentTurnSide = side;
+        CurrentTurnPlayer = side == PlayerSide.Runner ? PlayerNR.Runner : PlayerNR.Corporation;
+    }
 
 
     public bool IsCurrentTurn(PlayerSide playerSide)
@@ -91,10 +101,6 @@ public class GameManager : MonoBehaviour
         return currentTurnSide == playerSide;
 	}
 
-    public PlayerNR CurrentTurnPlayer()
-	{
-        return currentTurnSide == PlayerSide.Runner ? PlayerNR.Runner : PlayerNR.Corporation;
-	}
 
 
 }

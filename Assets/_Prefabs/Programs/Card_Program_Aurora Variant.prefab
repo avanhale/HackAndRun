@@ -80,7 +80,7 @@ PrefabInstance:
     - target: {fileID: 2322313622748644299, guid: e93e8dfb42af3994d8592f1d541c4291,
         type: 3}
       propertyPath: m_SizeDelta.x
-      value: 120
+      value: 100
       objectReference: {fileID: 0}
     - target: {fileID: 2322313622748644299, guid: e93e8dfb42af3994d8592f1d541c4291,
         type: 3}
@@ -271,6 +271,11 @@ PrefabInstance:
         type: 3}
       propertyPath: cardTitle
       value: Aurora
+      objectReference: {fileID: 0}
+    - target: {fileID: 6046998404111111164, guid: e93e8dfb42af3994d8592f1d541c4291,
+        type: 3}
+      propertyPath: strength
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 9029044460803289338, guid: e93e8dfb42af3994d8592f1d541c4291,
         type: 3}
