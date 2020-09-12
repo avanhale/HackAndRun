@@ -38,18 +38,26 @@ public abstract class Card : MonoBehaviour, ISelectableNR
 	protected virtual void OnEnable()
 	{
 		PlayCardManager.OnCardInstalled += OnCardInstalled;
+		myPlayer.OnCreditsChanged += MyPlayer_OnCreditsChanged;
 	}
-    protected virtual void OnDisable()
+
+	protected virtual void OnDisable()
     {
         PlayCardManager.OnCardInstalled -= OnCardInstalled;
+		myPlayer.OnCreditsChanged -= MyPlayer_OnCreditsChanged;
     }
     protected virtual void OnCardInstalled(Card card, bool installed)
 	{
 
 	}
 
-	// Start is called before the first frame update
-	protected virtual void Start()
+    private void MyPlayer_OnCreditsChanged()
+    {
+        cardFunction?.UpdatePaidAbilitesActive_Credits(myPlayer.Credits);
+    }
+
+    // Start is called before the first frame update
+    protected virtual void Start()
     {
         UpdateCardTitle();
         UpdateCardTypes();
@@ -133,7 +141,7 @@ public abstract class Card : MonoBehaviour, ISelectableNR
 
     public bool IsCardInHand()
 	{
-        return myPlayer.IsCardInHand(this);
+        return PlayArea.instance.HandNR(myPlayer).IsCardInHand(this);
 	}
 
 
@@ -144,7 +152,7 @@ public abstract class Card : MonoBehaviour, ISelectableNR
 
 	public virtual bool CanSelect()
 	{
-        return true;
+        return false;
 	}
 
 	public void Highlighted()
@@ -188,12 +196,29 @@ public abstract class Card : MonoBehaviour, ISelectableNR
 
 static class CardExtensions
 {
+    public static void MoveCardTo(this Card card, Transform parent)
+	{
+        // Remove from list
+        PlayArea_Spot currentSpot = card.GetComponentInParent<PlayArea_Spot>();
+        PlayArea_Spot newSpot = parent.GetComponentInParent<PlayArea_Spot>();
+        if (currentSpot && newSpot != currentSpot)
+        {
+            currentSpot.RemoveCard(card);
+        }
+
+        card.ParentCardTo(parent);
+    }
+
     public static void ParentCardTo(this Card card, Transform parent)
 	{
+        
+
+        // Parent card
         RectTransform rt = card.GetComponent<RectTransform>();
         card.transform.localScale = Vector3.one;
         card.transform.SetParent(parent, false);
         rt.anchorMin = rt.anchorMax = Vector2.one * 0.5f;
         rt.anchoredPosition = Vector3.zero;
+        
     }
 }

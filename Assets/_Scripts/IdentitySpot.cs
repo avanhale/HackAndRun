@@ -6,6 +6,6 @@ public class IdentitySpot : PlayArea_Spot
 
     public void SetIdentityCard(Card card)
 	{
-		card.ParentCardTo(cardIdentityT);
+		card.MoveCardTo(cardIdentityT);
 	}
 }

@@ -36,6 +36,9 @@ public class GameManager : MonoBehaviour
 
         SpawnAndSetCards(PlayerNR.Runner);
         SpawnAndSetCards(PlayerNR.Corporation);
+
+        yield return new WaitForSeconds(0.25f);
+
         SetPlayerCredits(PlayerNR.Runner, numCreditsToStartWith);
         SetPlayerCredits(PlayerNR.Corporation, numCreditsToStartWith);
         DrawFirstHands();

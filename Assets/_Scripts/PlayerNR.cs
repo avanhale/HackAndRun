@@ -65,8 +65,6 @@ public class PlayerNR : MonoBehaviour
     }
     public event ValueChanged OnMemoryChanged;
 
-    [SerializeField]
-    List<Card> cardsInHand = new List<Card>();
 
     [SerializeField]
     int linkStrength;
@@ -165,30 +163,6 @@ public class PlayerNR : MonoBehaviour
         MemoryUnitsTotal += amountMemory;
         MemoryUnitsAvailable += amountMemory;
 	}
-
-    public void AddCardsToHand(params Card[] cards)
-    {
-        for (int i = 0; i < cards.Length; i++)
-        {
-            cardsInHand.Add(cards[i]);
-        }
-        PlayArea.instance.AddCardsToHand(this, cards);
-    }
-
-    public int NumberOfCardsInHand()
-    {
-        return cardsInHand.Count;
-    }
-
-    public bool HandSizeFull()
-    {
-        return NumberOfCardsInHand() >= maximumHandSize;
-    }
-
-    public bool IsCardInHand(Card card)
-    {
-        return cardsInHand.Contains(card);
-    }
 
 
     public void AddTags(int numTags)

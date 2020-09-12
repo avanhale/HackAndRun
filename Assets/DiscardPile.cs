@@ -5,6 +5,7 @@ using UnityEngine;
 public class DiscardPile : PlayArea_Spot
 {
     public Transform cardsParentT;
+    public List<Card> cardsInDiscard = new List<Card>();
 
 	protected override void Awake()
 	{
@@ -27,8 +28,15 @@ public class DiscardPile : PlayArea_Spot
 
     public void AddCardToDiscard(Card card)
 	{
-        card.ParentCardTo(cardsParentT);
+        card.MoveCardTo(cardsParentT);
         card.FlipCardDown();
+        cardsInDiscard.Add(card);
+    }
+
+	public override void RemoveCard(Card card)
+	{
+		base.RemoveCard(card);
+        cardsInDiscard.Remove(card);
 	}
 
 

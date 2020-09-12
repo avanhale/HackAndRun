@@ -15,4 +15,9 @@ public abstract class PlayArea_Spot : MonoBehaviour
 	{
         myPlayer = player;
 	}
+
+	public virtual void RemoveCard(Card card)
+	{
+
+	}
 }

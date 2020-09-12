@@ -9,7 +9,10 @@ public class Hand : PlayArea_Spot
     int maximumHandSize = 5;
     public float cardScaleInHand;
 
-    [Header("Show Toggler")]
+	[SerializeField]
+	List<Card> cardsInHand = new List<Card>();
+
+	[Header("Show Toggler")]
     bool isShowing = false;
     RectTransform rt;
     public int showYValue, hideYValue;
@@ -30,7 +33,8 @@ public class Hand : PlayArea_Spot
 	{
 		for (int i = 0; i < cards.Length; i++)
 		{
-            cards[i].ParentCardTo(cardsParentT);
+			cardsInHand.Add(cards[i]);
+            cards[i].MoveCardTo(cardsParentT);
             ScaleCard(cards[i]);
 		}
 	}
@@ -53,5 +57,25 @@ public class Hand : PlayArea_Spot
         rt.DOAnchorPosY(isShowing ? showYValue : hideYValue, transitionTime);
 
     }
+
+	public int NumberOfCardsInHand()
+	{
+		return cardsInHand.Count;
+	}
+
+	public bool HandSizeFull()
+	{
+		return NumberOfCardsInHand() >= maximumHandSize;
+	}
+
+	public bool IsCardInHand(Card card)
+	{
+		return cardsInHand.Contains(card);
+	}
+
+	public override void RemoveCard(Card card)
+	{
+		cardsInHand.Remove(card);
+	}
 
 }

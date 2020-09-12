@@ -23,6 +23,11 @@ public class SelectorNR : MonoBehaviour
         Highlight(false);
     }
 
+    public void Hover(bool hover = true)
+	{
+        Highlight(hover);
+	}
+
     public void Highlight(bool highlight = true)
 	{
         if (selectable != null && selectable.CanHighlight())

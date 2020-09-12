@@ -64,7 +64,8 @@ public class PlayCardManager : MonoBehaviour
             drawnCard.FlipCard();
 		}
 
-        player.AddCardsToHand(drawnCards);
+        Hand hand = PlayArea.instance.HandNR(player);
+        hand.AddCardsToHand(drawnCards);
 	}
 
     public bool TryDrawNextCard()
@@ -168,6 +169,25 @@ public class PlayCardManager : MonoBehaviour
             return true;
 		}
         return false;
+	}
+
+    public void TryActivatePaidAbility(PaidAbility paidAbility)
+	{
+        if (paidAbility.currency == Currency.Credits)
+		{
+            if (CanAffordCost(paidAbility.payAmount))
+			{
+                paidAbility.ActivateAbility();
+                PayCost(paidAbility.payAmount);
+			}
+		}
+        else if (paidAbility.currency == Currency.Clicks)
+		{
+            if (GameManager.CurrentTurnPlayer.CanAffordAction(paidAbility.payAmount))
+			{
+                // Activate card on clicks
+			}
+		}
 	}
 
 
@@ -276,7 +296,7 @@ public class PlayCardManager : MonoBehaviour
 
     void SendCardToDiscard(Card card)
 	{
-        PlayArea.instance.SendCardToDiscard(PlayerNR.Runner, card);
+        PlayArea.instance.DiscardNR(GameManager.CurrentTurnPlayer).AddCardToDiscard(card);
 	}
 
 

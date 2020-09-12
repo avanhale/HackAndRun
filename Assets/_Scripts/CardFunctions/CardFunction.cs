@@ -5,10 +5,12 @@ using UnityEngine;
 public abstract class CardFunction : MonoBehaviour
 {
 	protected Card card;
+	public PaidAbility[] paidAbilities;
 
 	protected virtual void Awake()
 	{
 		card = GetComponent<Card>();
+		GetPaidAbilities();
 	}
 
 
@@ -39,5 +41,27 @@ public abstract class CardFunction : MonoBehaviour
 
 	}
 
+	public virtual void ActivatePaidAbility(int index)
+	{
+
+	}
+
+	public void UpdatePaidAbilitesActive_Credits(int playerCredits)
+	{
+		for (int i = 0; i < paidAbilities.Length; i++)
+		{
+			paidAbilities[i].ActivateOnCredits(playerCredits);
+		}
+	}
+
+
+	void GetPaidAbilities()
+	{
+		paidAbilities = GetComponentsInChildren<PaidAbility>();
+		for (int i = 0; i < paidAbilities.Length; i++)
+		{
+			paidAbilities[i].myAbilityIndex = i + 1;
+		}
+	}
 
 }

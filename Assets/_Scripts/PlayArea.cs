@@ -52,12 +52,6 @@ public class PlayArea : MonoBehaviour
         DeckNR(player).SetCardsToDeck(player.deckCards);
     }
 
-    public void AddCardsToHand(PlayerNR player, Card[] cards)
-    {
-        Hand hand = HandNR(player);
-        hand.AddCardsToHand(cards);
-    }
-
     public Card DrawCardFromDeck(PlayerNR player)
     {
         Deck deck = DeckNR(player);
@@ -73,15 +67,6 @@ public class PlayArea : MonoBehaviour
     {
         return runnerActionsReferenceCard.CostOfAction(actionIndex);
         //return -123;
-    }
-
-    public void SendCardToDiscard(PlayerNR player, Card card)
-	{
-        if (player.IsRunner())
-		{
-            runnerDiscardPile.AddCardToDiscard(card);
-        }
-
     }
 
 
@@ -103,8 +88,33 @@ public class PlayArea : MonoBehaviour
     }
 
 
+    public DiscardPile DiscardNR(PlayerNR player)
+    {
+        return player.IsRunner() ? runnerDiscardPile : corpDiscardPile;
+    }
+
+
     #endregion
 
+
+    public void ParentCardTo(Card card, Transform parent)
+	{
+        // Parent
+        RectTransform rt = card.GetComponent<RectTransform>();
+        card.transform.localScale = Vector3.one;
+        card.transform.SetParent(parent, false);
+        rt.anchorMin = rt.anchorMax = Vector2.one * 0.5f;
+        rt.anchoredPosition = Vector3.zero;
+
+        // Remove from list
+        PlayArea_Spot currentSpot = card.GetComponentInParent<PlayArea_Spot>();
+        PlayArea_Spot newSpot = parent.GetComponentInParent<PlayArea_Spot>();
+        if (newSpot != currentSpot)
+		{
+            currentSpot.RemoveCard(card);
+		}
+
+    }
 
 
     void GetAllReferences()

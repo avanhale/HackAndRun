@@ -39,7 +39,7 @@ public class Deck : PlayArea_Spot, ISelectableNR
         // Reverse because lowest in hierarchy is visually on top of deck (first card, last child)
         for (int i = cardsInDeck.Count-1; i >= 0; i--)
 		{
-            cardsInDeck[i].ParentCardTo(cardsParentT);
+            cardsInDeck[i].MoveCardTo(cardsParentT);
         }
     }
 
