@@ -32,7 +32,7 @@ public class GameManager : MonoBehaviour
 
     IEnumerator StartGame()
 	{
-        yield return new WaitForSeconds(1);
+        yield return new WaitForSeconds(0.25f);
 
         SpawnAndSetCards(PlayerNR.Runner);
         SpawnAndSetCards(PlayerNR.Corporation);
@@ -62,11 +62,12 @@ public class GameManager : MonoBehaviour
         Card[] e_deckCards = player.e_PlayerDeck.deckCards;
         int numCards = e_deckCards.Length;
         Card[] deckCards = new Card[numCards];
-		for (int i = 0; i < numCards; i++)
+        for (int i = 0; i < numCards; i++)
 		{
             Card card = Instantiate(e_deckCards[i]);
             deckCards[i] = card;
-		}
+
+        }
 
         player.SetPlayerCards(identityCard, deckCards);
         PlayArea.instance.SetCardsToSpots(player);

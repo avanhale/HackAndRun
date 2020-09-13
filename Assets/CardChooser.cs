@@ -7,6 +7,7 @@ public class CardChooser : MonoBehaviour
     public SelectorNR hoveredSelector;
     public delegate void HoveredOverCard(Card card);
     public static event HoveredOverCard OnHoveredOverCard;
+    public static event HoveredOverCard OnCardPinned;
 
     // Start is called before the first frame update
     void Start()
@@ -25,6 +26,18 @@ public class CardChooser : MonoBehaviour
                 hoveredSelector.Click();
 			}
 		}
+        else if (Input.GetMouseButtonDown(1))
+		{
+            if (hoveredSelector)
+			{
+                Card card = hoveredSelector.GetComponentInParent<Card>();
+                OnCardPinned?.Invoke(card);
+            }
+            else
+			{
+                OnCardPinned?.Invoke(null);
+			}
+        }
     }
 
 
@@ -45,7 +58,7 @@ public class CardChooser : MonoBehaviour
                     selector.Hover();
 
                     Card card = selector.GetComponentInParent<Card>();
-                    if (card) OnHoveredOverCard?.Invoke(card);
+                    OnHoveredOverCard?.Invoke(card);
 
                     hoveredSelector = selector;
                 }
@@ -53,9 +66,13 @@ public class CardChooser : MonoBehaviour
 		}
         else
 		{
-            if (hoveredSelector) hoveredSelector.Hover(false);
-            hoveredSelector = null;
-		}
+            if (hoveredSelector)
+            {
+                hoveredSelector.Hover(false);
+                OnHoveredOverCard?.Invoke(null);
+                hoveredSelector = null;
+            }
+        }
 
 	}
 

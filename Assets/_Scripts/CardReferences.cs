@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using UnityEngine.UI;
 
 public class CardReferences : MonoBehaviour
 {
@@ -9,6 +10,7 @@ public class CardReferences : MonoBehaviour
     public TextMeshProUGUI titleText;
     public TextMeshProUGUI cardTypeText, cardSubTypeText;
     public TextMeshProUGUI costText;
+    public Image cardPin;
 
     // Start is called before the first frame update
     void Start()

@@ -7,6 +7,7 @@ using UnityEngine.UI;
 public class SelectorNR : MonoBehaviour
 {
     public Image highlighter;
+    public Image pinner;
     public UnityEvent onHighlighted, onClicked;
     public ISelectableNR selectable;
     Color ogColor;
@@ -56,6 +57,5 @@ public class SelectorNR : MonoBehaviour
             Highlight(true);
         }
 	}
-
 
 }

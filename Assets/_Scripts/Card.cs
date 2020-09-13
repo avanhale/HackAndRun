@@ -7,7 +7,8 @@ using DG.Tweening;
 public abstract class Card : MonoBehaviour, ISelectableNR
 {
     CardReferences cardRefs;
-    protected CardFunction cardFunction;
+    [HideInInspector]
+    public CardFunction cardFunction;
     [HideInInspector]
     public CardCost cardCost;
 
@@ -25,6 +26,9 @@ public abstract class Card : MonoBehaviour, ISelectableNR
     float cardFlipTransitionTime = 1f;
 
 
+    public int viewIndex;
+
+
 
     protected virtual void Awake()
 	{
@@ -33,6 +37,7 @@ public abstract class Card : MonoBehaviour, ISelectableNR
         cardFunction = GetComponent<CardFunction>();
         cardCost = GetComponent<CardCost>();
         myPlayer = playerSide == PlayerSide.Runner ? PlayerNR.Runner : PlayerNR.Corporation;
+        Pinned(false);
     }
 
 	protected virtual void OnEnable()
@@ -169,6 +174,11 @@ public abstract class Card : MonoBehaviour, ISelectableNR
         print(IsCardInHand());
 	}
 
+    public void Pinned(bool pinned = true)
+    {
+        cardRefs.cardPin.enabled = pinned;
+    }
+
     public void ActivateCardFromHand()
 	{
         if (this is IInstallable)
@@ -182,6 +192,8 @@ public abstract class Card : MonoBehaviour, ISelectableNR
             PlayCardManager.instance.TryActivateEvent(activateable);
         }
     }
+
+	
 
 
 	//private void OnValidate()

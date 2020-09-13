@@ -4,7 +4,8 @@ using UnityEngine;
 
 public abstract class CardFunction : MonoBehaviour
 {
-	protected Card card;
+	[HideInInspector]
+	public Card card;
 	public PaidAbility[] paidAbilities;
 
 	protected virtual void Awake()
@@ -61,6 +62,14 @@ public abstract class CardFunction : MonoBehaviour
 		for (int i = 0; i < paidAbilities.Length; i++)
 		{
 			paidAbilities[i].myAbilityIndex = i + 1;
+		}
+	}
+
+	public void SetAllPaidAbilityClickables(bool clickable = true)
+	{
+		for (int i = 0; i < paidAbilities.Length; i++)
+		{
+			paidAbilities[i].SetClickable(clickable);
 		}
 	}
 

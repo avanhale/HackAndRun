@@ -10,29 +10,25 @@ public class PaidAbility : MonoBehaviour
     Button button;
     public GameObject clickableGO;
 
-	CardFunction cardFunction;
+	public CardFunction cardFunction;
     [HideInInspector]
     public int myAbilityIndex;
+
+    public CardFunction viewCardFunction;
 
 	//public string AbilityText;
 	private void Awake()
 	{
         cardFunction = GetComponentInParent<CardFunction>();
         button = GetComponent<Button>();
+        SetClickable(false);
     }
 
-
-    // Start is called before the first frame update
     void Start()
     {
         
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
 
     public void SetClickable(bool clickable)
 	{
@@ -53,7 +49,15 @@ public class PaidAbility : MonoBehaviour
     public void ActivateAbility()
 	{
         cardFunction.ActivatePaidAbility(myAbilityIndex);
+        //if (viewCardFunction) viewCardFunction.ActivatePaidAbility(myAbilityIndex);
     }
+
+
+    public void SetCardFunctions(CardFunction _cardFunction, CardFunction _viewCardFunction)
+	{
+        cardFunction = _cardFunction;
+        viewCardFunction = _viewCardFunction;
+	}
 
 
 

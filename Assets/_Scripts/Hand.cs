@@ -36,6 +36,9 @@ public class Hand : PlayArea_Spot
 			cardsInHand.Add(cards[i]);
             cards[i].MoveCardTo(cardsParentT);
             ScaleCard(cards[i]);
+			Vector3 localPos = cards[i].transform.localPosition;
+			localPos.z = -1 * cardsInHand.Count;
+			cards[i].transform.localPosition = localPos;
 		}
 	}
 
